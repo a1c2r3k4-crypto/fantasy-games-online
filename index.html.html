@@ -1,0 +1,3472 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b16">
+<title>Fantasy Games 8.7 — La Guerra de los Reinos</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Marcellus&family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root{
+  --gold:#d7b46a;
+  --gold-light:#f5dfa0;
+  --gold-dark:#85652d;
+  --bg:#090b16;
+  --panel:#111526;
+  --panel2:#191f33;
+  --text:#f4eddf;
+  --muted:#a9a9b8;
+  --red:#287fce;
+  --green:#4f9b78;
+  --tile-light:#d7c7a6;
+  --tile-dark:#51465a;
+  --shadow:0 18px 55px #0009;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  background:
+    radial-gradient(ellipse at 50% 0%,#34304b 0%,transparent 42%),
+    radial-gradient(ellipse at 15% 80%,#17243a 0%,transparent 40%),
+    linear-gradient(135deg,#080a13,#101326 55%,#080a13);
+  font-family:Montserrat,Arial,sans-serif;overflow-x:hidden
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:2px solid var(--gold-light);outline-offset:3px
+}
+#particles{
+  position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0
+}
+.particle{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:#f6d88a;box-shadow:0 0 12px 3px #d9ad5570;
+  animation:floatParticle linear infinite;opacity:0
+}
+@keyframes floatParticle{
+  0%{transform:translateY(30px) scale(.5);opacity:0}
+  15%{opacity:.8}
+  85%{opacity:.5}
+  100%{transform:translateY(-110vh) scale(1.4);opacity:0}
+}
+#app{position:relative;z-index:1;min-height:100vh}
+.screen{
+  display:none;min-height:100vh;padding:28px 22px 50px;
+  animation:screenIn .55s ease both
+}
+.screen.active{display:block}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.brand{text-align:center;margin:24px auto 30px}
+.brand-kicker{
+  color:var(--gold);font-size:11px;letter-spacing:7px;
+  text-transform:uppercase;margin-bottom:12px
+}
+.brand h1{
+  font-family:Cinzel,serif;font-size:clamp(34px,7vw,76px);
+  line-height:1.05;letter-spacing:3px;margin:0;
+  color:var(--gold-light);
+  text-shadow:0 0 25px #d9ad5550,0 5px 2px #000
+}
+.brand h1 span{display:block;font-size:.36em;letter-spacing:8px;margin-top:13px}
+.brand-subtitle{
+  color:#c5b99f;font-family:Marcellus,serif;
+  letter-spacing:3px;font-size:13px;margin-top:18px
+}
+.gold-line{
+  width:min(440px,75%);height:1px;margin:22px auto;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)
+}
+.menu-wrap{max-width:820px;margin:auto;text-align:center}
+.menu-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;max-width:620px;margin:30px auto
+}
+.fantasy-btn{
+  position:relative;overflow:hidden;border:1px solid #b9985a88;
+  color:#f7e9c7;background:linear-gradient(145deg,#29243a,#141a2b);
+  padding:17px 20px;border-radius:8px;letter-spacing:1.5px;
+  font-family:Cinzel,serif;font-weight:700;font-size:13px;
+  box-shadow:0 7px 22px #0006,inset 0 1px #ffffff12;
+  transition:.25s transform,.25s border-color,.25s box-shadow
+}
+.fantasy-btn:before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent,#ffffff12,transparent);
+  transform:translateX(-120%);transition:.6s
+}
+.fantasy-btn:hover{
+  transform:translateY(-3px);border-color:var(--gold);
+  box-shadow:0 12px 30px #0008,0 0 18px #d9ad5525
+}
+.fantasy-btn:hover:before{transform:translateX(120%)}
+.fantasy-btn.primary{
+  background:linear-gradient(135deg,#8d682d,#49351f);
+  color:#fff1c9;border-color:#e6c77f
+}
+.fantasy-btn.danger{border-color:#9e4654;color:#ffdce0}
+.fantasy-btn.small{padding:10px 14px;font-size:11px}
+.fantasy-btn.wide{width:100%}
+.menu-note{color:var(--muted);font-size:11px;letter-spacing:1px}
+.screen-heading{
+  font-family:Cinzel,serif;text-align:center;color:var(--gold-light);
+  font-size:clamp(25px,4vw,39px);margin:8px 0 24px
+}
+.panel{
+  background:linear-gradient(145deg,#171d30ed,#0f1424f2);
+  border:1px solid #b99a5a55;border-radius:12px;
+  box-shadow:var(--shadow);padding:22px
+}
+.panel-title{
+  color:var(--gold);font-family:Cinzel,serif;
+  letter-spacing:2px;font-size:15px;margin:0 0 16px
+}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+.topbar{
+  max-width:1200px;margin:0 auto 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px
+}
+.topbar-brand{font-family:Cinzel,serif;color:var(--gold);letter-spacing:2px}
+.game-layout{
+  max-width:1250px;margin:auto;display:grid;
+  grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start
+}
+.board-panel{min-width:0}
+.board-top{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;margin-bottom:13px;flex-wrap:wrap
+}
+.turn-label{font-family:Cinzel,serif;color:var(--gold-light);font-size:14px}
+#check-status{color:#ff9b9b;font-size:12px;min-height:18px}
+.chessboard{
+  width:min(100%,680px);aspect-ratio:1;margin:auto;
+  display:grid;grid-template-columns:repeat(8,1fr);
+  border:7px solid transparent;border-image:linear-gradient(135deg,#fff0b0,#8c6730 22%,#f7dc91 48%,#49351d 72%,#d8b66d) 1;
+  border-radius:8px;
+  background:linear-gradient(145deg,#28344a,#0b1020);
+  box-shadow:0 24px 65px #000d,0 0 34px #d9ad5540,inset 0 0 0 2px #ffffff20;
+  overflow:hidden;position:relative;transform:perspective(1100px) rotateX(2deg);transform-origin:center
+}
+.square{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;aspect-ratio:1;user-select:none;
+  font-family:serif;font-size:clamp(23px,5vw,57px);
+  cursor:pointer;transition:filter .15s
+}
+.square.light{background:linear-gradient(145deg,#e7d9b8,#a99878 58%,#74654f);box-shadow:inset 1px 1px #fff9,inset -2px -2px 5px #33271955}
+.square.dark{background:linear-gradient(145deg,#59627b,#292d43 58%,#171b2c);box-shadow:inset 1px 1px #ffffff25,inset -2px -2px 5px #0009}
+.square:before{content:"";position:absolute;inset:0;border:1px solid #ffffff12;pointer-events:none}
+.square:hover{filter:brightness(1.28);box-shadow:inset 0 0 18px #9ddcff55, inset 0 0 0 1px #b9e8ff88}
+.square:hover{filter:brightness(1.13)}
+.square.selected{box-shadow:inset 0 0 0 4px #f4d46f}
+.square.legal:after{
+  content:"";position:absolute;width:24%;height:24%;
+  border-radius:50%;background:#182d2480;
+  box-shadow:0 0 0 2px #fff4
+}
+.square.capture:after{
+  content:"";position:absolute;inset:4px;
+  border:4px solid #b8323cbb;border-radius:50%
+}
+.square.last-move{background-image:linear-gradient(#e6c85b55,#e6c85b55)}
+.square.in-check{box-shadow:inset 0 0 0 5px #d33b4d;animation:checkPulse .8s infinite alternate}
+@keyframes checkPulse{to{box-shadow:inset 0 0 0 2px #ff6677, inset 0 0 25px #e52c4d88}}
+.piece{
+  position:relative;z-index:2;line-height:1;
+  filter:drop-shadow(0 3px 2px #0008);
+  transition:transform .16s
+}
+.square.selected .piece{transform:scale(1.13)}
+.piece.white{color:#fff1c8;text-shadow:0 2px 2px #4b3518,0 4px 5px #000b,0 0 10px #fff4,0 0 20px #f4d47a88;filter:drop-shadow(0 5px 3px #000b)}
+.piece.black{color:#242b3d;text-shadow:0 1px 1px #ffffffaa,0 4px 5px #000d,0 0 12px #7ab9ff88;filter:drop-shadow(0 5px 3px #000c)}
+.board-coordinates{
+  display:flex;justify-content:space-around;color:#c5b58e;
+  font-size:10px;margin-top:7px
+}
+.game-side{display:flex;flex-direction:column;gap:14px}
+.player-card{
+  display:flex;align-items:center;gap:12px;padding:12px;
+  border:1px solid #b99a5a44;border-radius:9px;
+  background:#151b2c
+}
+.avatar{
+  width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center;background:#302b3d;
+  border:1px solid var(--gold);font-size:22px
+}
+.player-name{font-family:Cinzel,serif;color:#f5dfaa;font-size:13px}
+.player-meta{font-size:10px;color:var(--muted);margin-top:4px}
+.player-card.active-player{border-color:var(--gold);box-shadow:0 0 15px #d9ad5520}
+.captured-row{font-size:20px;min-height:28px;letter-spacing:2px}
+.history{
+  max-height:230px;overflow:auto;font-size:11px;color:#ded6c5
+}
+.history-row{
+  display:grid;grid-template-columns:30px 1fr 1fr;
+  padding:7px 5px;border-bottom:1px solid #ffffff10
+}
+.history-row:nth-child(odd){background:#ffffff06}
+.game-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{display:flex;flex-direction:column;gap:7px;margin:12px 0}
+.field label{font-size:11px;color:var(--gold);letter-spacing:1px}
+.field input,.field select{
+  width:100%;padding:12px;border-radius:6px;
+  border:1px solid #9c814d77;background:#0b1020;
+  color:var(--text)
+}
+.settings-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;max-width:850px;margin:auto
+}
+.setting-row{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;padding:12px 0;border-bottom:1px solid #ffffff12;
+  font-size:12px
+}
+.setting-row input[type=checkbox]{accent-color:#d7b46a;width:18px;height:18px}
+.metrics{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;margin-bottom:18px
+}
+.metric{
+  text-align:center;padding:18px 8px;border:1px solid #b99a5a55;
+  border-radius:9px;background:#151b2c
+}
+.metric strong{display:block;color:var(--gold-light);font:700 27px Cinzel,serif}
+.metric span{font-size:10px;color:var(--muted)}
+.online-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;max-width:800px;margin:auto
+}
+.room-code{
+  font:700 27px Cinzel,serif;letter-spacing:7px;
+  color:var(--gold-light);text-align:center;padding:16px
+}
+.dedication-wrap{
+  min-height:75vh;display:grid;place-items:center;padding:25px 12px
+}
+.book{
+  width:min(700px,100%);position:relative;padding:50px 38px;
+  text-align:center;border:1px solid #c49d55;
+  border-radius:8px 18px 18px 8px;
+  background:
+    radial-gradient(ellipse at 50% 30%,#51402b88,transparent 70%),
+    linear-gradient(120deg,#261b20,#151322 55%,#2b2030);
+  box-shadow:inset 12px 0 18px #0008,0 25px 80px #000b,0 0 45px #d9ad5520;
+  animation:bookReveal 1.3s cubic-bezier(.2,.8,.2,1) both
+}
+.book:before{
+  content:"";position:absolute;left:14px;top:12px;bottom:12px;
+  width:2px;background:linear-gradient(transparent,#d5b16a,transparent)
+}
+@keyframes bookReveal{
+  from{opacity:0;transform:perspective(900px) rotateY(-22deg) scale(.92)}
+  to{opacity:1;transform:perspective(900px) rotateY(0) scale(1)}
+}
+.book-ornament{font-size:34px;color:var(--gold);margin-bottom:20px}
+.book h2{
+  font:700 clamp(25px,5vw,42px) Cinzel,serif;
+  color:var(--gold-light);line-height:1.3;
+  text-shadow:0 0 25px #e2bd6b55;margin:8px 0 14px;
+  animation:textAppear 1.8s .4s both
+}
+.book-signature{
+  font:italic 14px Marcellus,serif;letter-spacing:2px;
+  color:#cbbd9d;margin-top:16px;animation:textAppear 2s .8s both
+}
+.book-divider{
+  height:1px;width:70%;margin:25px auto;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)
+}
+.book-message{
+  font:16px/1.9 Marcellus,serif;color:#e5d8bd;
+  max-width:520px;margin:20px auto;animation:textAppear 2s .9s both
+}
+.book-footer{font:11px Cinzel,serif;letter-spacing:3px;color:var(--gold);margin-top:28px}
+@keyframes textAppear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-backdrop{
+  display:none;position:fixed;inset:0;z-index:20;
+  background:#050711d9;backdrop-filter:blur(7px);
+  align-items:center;justify-content:center;padding:18px
+}
+.modal-backdrop.open{display:flex;animation:screenIn .2s ease}
+.modal{
+  width:min(470px,100%);max-height:90vh;overflow:auto;
+  background:linear-gradient(145deg,#20243a,#101525);
+  border:1px solid var(--gold-dark);border-radius:12px;
+  padding:25px;box-shadow:0 25px 90px #000c
+}
+.modal h2{text-align:center;color:var(--gold-light);font:700 23px Cinzel,serif}
+.modal-actions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.toast{
+  position:fixed;z-index:50;left:50%;bottom:25px;
+  transform:translate(-50%,30px);opacity:0;pointer-events:none;
+  padding:12px 20px;border:1px solid var(--gold);
+  border-radius:8px;background:#171b2c;color:#f7e8c5;
+  box-shadow:var(--shadow);font-size:12px;transition:.3s
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.victory-glow{animation:victoryPulse 1.4s ease-in-out infinite alternate}
+@keyframes victoryPulse{to{box-shadow:0 0 55px #d9ad5570}}
+footer{text-align:center;color:#77798b;font-size:10px;letter-spacing:2px;margin:35px auto 5px}
+@media(max-width:850px){
+  .game-layout{grid-template-columns:1fr}
+  .game-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .game-side .panel.history-panel{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .screen{padding:18px 12px 35px}
+  .menu-grid,.settings-grid,.online-grid{grid-template-columns:1fr}
+  .menu-grid{max-width:360px}
+  .game-side{grid-template-columns:1fr}
+  .metrics{grid-template-columns:repeat(2,1fr)}
+  .book{padding:42px 22px}
+  .book-message{font-size:14px}
+  .fantasy-btn{padding:15px 12px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+
+/* ---------- FANTASY GAMES 8.0: DAMAS CHINAS ---------- */
+.chinese-layout{max-width:1250px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:20px;align-items:start}
+.chinese-board-panel{min-width:0}
+.chinese-board{
+  width:min(100%,720px);aspect-ratio:1;margin:12px auto 4px;position:relative;
+  display:grid;grid-template-columns:repeat(17,minmax(0,1fr));grid-template-rows:repeat(17,minmax(0,1fr));
+  padding:2.5%;border:7px solid transparent;border-image:linear-gradient(135deg,#fff0b0,#8c6730 22%,#f7dc91 48%,#49351d 72%,#d8b66d) 1;overflow:hidden;
+  background:radial-gradient(circle at 50% 42%,#465b78 0%,#1b2943 48%,#080e1b 100%);
+  box-shadow:0 24px 65px #000d,0 0 38px #63c9ff35,inset 0 0 35px #8edcff18;
+}
+.cc-hole{
+  align-self:center;justify-self:center;width:76%;height:76%;min-width:0;min-height:0;
+  border-radius:50%;border:1px solid #b9d9f477;background:radial-gradient(circle at 32% 25%,#b5c9df,#43516c 48%,#121a2b 82%);
+  box-shadow:inset 0 3px 7px #ffffff45,inset 0 -5px 8px #000c,0 2px 5px #000b,0 0 7px #80cfff33;display:grid;place-items:center;
+  padding:0;cursor:pointer;position:relative;transition:transform .12s,filter .12s;
+}
+.cc-hole:hover{filter:brightness(1.35);transform:scale(1.12)}
+.cc-hole.cc-empty{background:radial-gradient(circle at 35% 28%,#253650,#0a1020 75%);border-color:#91c8ed77;box-shadow:inset 0 3px 8px #000d,0 0 8px #5bcaff20}
+.cc-hole.cc-selected{outline:3px solid #ffe18a;outline-offset:1px;z-index:3}
+.cc-hole.cc-legal{box-shadow:0 0 0 3px #f6d47c,0 0 16px #f6d47c88;z-index:2}
+.cc-hole.cc-path{outline:2px solid #80d7b2}
+.cc-marble{width:78%;height:78%;border-radius:50%;display:block;box-shadow:inset -4px -5px 7px #0009,inset 3px 3px 7px #fff9,0 4px 8px #000c,0 0 12px currentColor;pointer-events:none;filter:saturate(1.18)}
+.cc-player-0{background:radial-gradient(circle at 30% 25%,#fff2bd,#d8a536 55%,#80501d)}
+.cc-player-1{background:radial-gradient(circle at 30% 25%,#ffd0d8,#b93657 55%,#5c182e)}
+.cc-player-2{background:radial-gradient(circle at 30% 25%,#c9f3ff,#3d91c5 55%,#164263)}
+.cc-player-3{background:radial-gradient(circle at 30% 25%,#e1d2ff,#805ac0 55%,#39215e)}
+.cc-player-4{background:radial-gradient(circle at 30% 25%,#d5ffd0,#58a85b 55%,#24542b)}
+.cc-player-5{background:radial-gradient(circle at 30% 25%,#ffe0b8,#c87835 55%,#673b1d)}
+.cc-players{display:grid;gap:8px}
+.cc-player-row{display:flex;align-items:center;gap:9px;padding:8px;border:1px solid #ffffff16;border-radius:7px;font-size:11px}
+.cc-player-row.active{border-color:var(--gold);background:#d7b46a12;box-shadow:0 0 12px #d7b46a18}
+.cc-dot{width:18px;height:18px;border-radius:50%;flex:none;box-shadow:inset -2px -2px 4px #0008,inset 1px 1px 3px #fff7}
+.cc-rules{padding-left:18px;color:#c8c5c0;font-size:11px;line-height:1.8}
+.chinese-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+@media(max-width:850px){.chinese-layout{grid-template-columns:1fr}.chinese-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.chinese-side{grid-template-columns:1fr}.chinese-board{border-width:2px;padding:1.5%}.cc-hole{width:82%;height:82%}}
+
+
+/* FANTASY GAMES 8.0 — acabado visual renovado */
+:root{--gold:#e4c477;--gold-light:#fff0bd;--gold-dark:#765323;--panel:#11182a}
+body{background:radial-gradient(ellipse at 50% -8%,#5a4969 0%,transparent 38%),radial-gradient(ellipse at 8% 82%,#16364b88,transparent 42%),linear-gradient(135deg,#050812,#11182a 48%,#070b16)}
+.panel{background:linear-gradient(145deg,#1c2940f2,#0b1222f5 72%);border:1px solid #d8b66b66;box-shadow:0 22px 55px #000b,inset 0 1px #ffffff12,inset 0 0 28px #89b8ff08}
+.fantasy-btn{border:1px solid #d9b86f99;background:linear-gradient(145deg,#39435b,#141b2c 58%,#20273a);box-shadow:0 8px 20px #0008,inset 0 1px #fff3,inset 0 -2px #0005}
+.fantasy-btn.primary{background:linear-gradient(135deg,#b18a42,#5b3c20 70%,#302318);box-shadow:0 8px 24px #0009,inset 0 1px #fff5,0 0 18px #d6ae5540}
+.brand h1{text-shadow:0 0 30px #e4c47777,0 5px 3px #000;letter-spacing:4px}
+.chessboard,.checkers-board{border:7px solid #b28b4e;border-radius:12px;background:linear-gradient(145deg,#52617b,#101827);box-shadow:0 28px 65px #000e,0 0 34px #d9ad5544,inset 0 0 0 2px #fff4;overflow:hidden}
+.square{overflow:hidden}
+.square.light{background:linear-gradient(145deg,#f1e5c8,#b8a17a 62%,#806a4d);box-shadow:inset 1px 1px #fff9,inset -3px -3px 7px #38281855}
+.square.dark{background:linear-gradient(145deg,#66758f,#303b55 58%,#171f31);box-shadow:inset 1px 1px #ffffff25,inset -3px -3px 7px #000a}
+.square:hover{filter:brightness(1.18);box-shadow:inset 0 0 22px #9ddcff66,inset 0 0 0 1px #c9edff99}
+.piece{filter:drop-shadow(0 5px 3px #000c);font-size:clamp(25px,5vw,58px)}
+.piece.white{color:#fff4d7;text-shadow:0 2px 2px #62461e,0 5px 8px #000c,0 0 16px #fff7}
+.piece.black{color:#18263d;text-shadow:0 1px 1px #fff9,0 5px 8px #000e,0 0 15px #7ab9ff99}
+.player-card{background:linear-gradient(135deg,#26324a,#101827);border-color:#d4b36a55;box-shadow:inset 0 1px #fff1,0 8px 18px #0005}
+.player-card.active-player{border-color:#f3d68c;box-shadow:0 0 0 1px #f3d68c55,0 0 25px #d9ad5540}
+.menu-grid{max-width:700px;gap:16px}
+.menu-grid .fantasy-btn{min-height:64px}
+.screen{padding-top:30px}
+.draughts-layout{max-width:1250px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start}
+.checkers-board{width:min(100%,680px);aspect-ratio:1;margin:auto;display:grid;grid-template-columns:repeat(8,1fr);transform:perspective(1100px) rotateX(1.5deg)}
+.draught-piece{width:76%;height:76%;border-radius:50%;display:grid;place-items:center;position:relative;z-index:3;font-size:clamp(13px,2.4vw,25px);font-weight:900;line-height:1;box-shadow:inset 0 4px 5px #fff8,inset 0 -7px 9px #0009,0 7px 9px #000b;transition:transform .18s}
+.draught-piece.red{background:radial-gradient(circle at 32% 23%,#e9f7ff,#398bc8 54%,#0b2948);border:2px solid #b9e5ff;color:#ffe6ce;text-shadow:0 2px 3px #16456b}
+.draught-piece.black{background:radial-gradient(circle at 32% 23%,#b8d4ef,#334b6c 52%,#101b2d);border:2px solid #9ec8ec;color:#e8f4ff;text-shadow:0 2px 3px #07111d}
+.draught-piece.king:after{content:'♛';font-family:serif;color:#ffe7a3;text-shadow:0 2px 5px #000;font-size:1.05em}
+.square.selected .draught-piece{transform:translateY(-4px) scale(1.08);box-shadow:0 0 0 4px #ffe08b,0 0 24px #ffdc7a}
+.square.legal:after{background:#80edb6aa;box-shadow:0 0 0 2px #efffee,0 0 12px #7dffc5}
+.checkers-status{min-height:34px;color:#d9cba8;font-size:12px;line-height:1.6}
+.checkers-controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.checkers-rules{font-size:11px;line-height:1.8;color:#d2d0d0;padding-left:18px}
+.checkers-player{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #ffffff18;border-radius:8px;margin:7px 0;background:#ffffff06;font-size:12px}
+.checkers-player.active{border-color:var(--gold);box-shadow:0 0 16px #d7b46a24}
+.checkers-dot{width:20px;height:20px;border-radius:50%;box-shadow:inset 0 3px 4px #fff8,inset 0 -4px 5px #000a,0 3px 5px #0008}
+.checkers-dot.red{background:radial-gradient(circle at 30% 25%,#e9f7ff,#398bc8 58%,#0b2948)}
+.checkers-dot.black{background:radial-gradient(circle at 30% 25%,#b8d4ef,#334b6c 58%,#101b2d)}
+@media(max-width:850px){.game-layout,.draughts-layout{grid-template-columns:1fr}.game-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.screen{padding:18px 10px 35px}.panel{padding:14px}.menu-grid{grid-template-columns:1fr}.game-side{grid-template-columns:1fr}.chessboard,.checkers-board{border-width:4px}.draught-piece{width:80%;height:80%}}
+
+
+
+/* ===== FANTASY GAMES 8.0: GUERREROS DE LOS REINOS ===== */
+:root{
+  --gold:#e0b65f;--gold-light:#ffe7a0;--gold-dark:#79501f;
+  --bg:#090607;--panel:#171013;--panel2:#24171a;
+  --text:#f7ead9;--muted:#c0a8a0;--red:#287fce;
+  --tile-light:#80634c;--tile-dark:#21191d;
+}
+body{
+ background:
+  radial-gradient(ellipse at 50% 8%,#8a321e55 0%,transparent 38%),
+  radial-gradient(ellipse at 8% 80%,#571b1b55 0%,transparent 36%),
+  radial-gradient(ellipse at 92% 65%,#a34b1d33 0%,transparent 32%),
+  linear-gradient(145deg,#080607 0%,#1c1012 48%,#090607 100%);
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.22;
+ background:repeating-linear-gradient(118deg,transparent 0 46px,#ff9b4210 47px 48px,transparent 49px 96px);
+ mix-blend-mode:screen;
+}
+.brand h1,.topbar-brand,.screen-heading{
+ color:#ffe4a0;text-shadow:0 2px 0 #4b1c0c,0 0 16px #ff7b283d,0 5px 8px #000;
+}
+.panel,.player-card,.fantasy-btn,.modal-card{
+ border-color:#a66d3d88!important;
+ background:linear-gradient(145deg,#28191b 0%,#120d10 72%,#241316 100%)!important;
+ box-shadow:0 12px 30px #0009,inset 0 1px #ffdb8b18;
+}
+.fantasy-btn{color:#ffe9bd!important;text-shadow:0 1px 2px #000;transition:transform .2s,filter .2s,box-shadow .2s!important}
+.fantasy-btn:hover{transform:translateY(-2px);filter:brightness(1.22);box-shadow:0 0 20px #ff8c3740,inset 0 1px #fff5!important}
+.fantasy-btn.primary{background:linear-gradient(135deg,#8d281e,#3b1114 65%,#1d0d10)!important;border-color:#e6a34c!important}
+.chessboard,.checkers-board{
+ border:7px solid #b67c38!important;border-radius:10px!important;
+ background:linear-gradient(145deg,#6d462b,#160f12 55%,#3b211c)!important;
+ box-shadow:0 28px 65px #000e,0 0 34px #e88a3444,inset 0 0 0 2px #ffe1a044!important;
+ transform:perspective(1200px) rotateX(2deg);
+}
+.square.light{background:linear-gradient(145deg,#a17c59,#73513b 60%,#4a3027)!important;box-shadow:inset 1px 1px #fff5,inset -3px -3px 8px #1c0d0b88!important}
+.square.dark{background:linear-gradient(145deg,#49343a,#281b22 60%,#130e14)!important;box-shadow:inset 1px 1px #ffffff20,inset -3px -3px 8px #000c!important}
+.square.last-move{background-image:linear-gradient(#f3bd4b55,#f3bd4b55)!important}
+.piece{
+ display:inline-block;transform:translateY(-2px);
+ filter:drop-shadow(0 3px 0 #28120d) drop-shadow(0 8px 5px #000d);
+ transition:transform .2s,filter .2s;
+ text-rendering:geometricPrecision;
+}
+.piece.white{
+ color:#fff0c7!important;
+ text-shadow:0 1px 0 #fff,0 3px 0 #a77a3d,0 5px 0 #60401f,0 7px 9px #000d,0 0 18px #ffdb8b88!important;
+}
+.piece.black{
+ color:#35313a!important;
+ text-shadow:0 1px 0 #d5c4b5,0 3px 0 #19141a,0 5px 0 #080609,0 8px 10px #000!important;
+}
+.square.selected .piece{transform:translateY(-9px) scale(1.18) rotateY(8deg);filter:drop-shadow(0 0 12px #ffd36a)!important}
+.square.legal:after{background:#ffd47b99!important;box-shadow:0 0 0 2px #fff1d2,0 0 15px #ffb74d!important}
+.square.capture:after{border-color:#ff534d!important;box-shadow:0 0 16px #f33!important}
+.draught-piece{border-width:3px!important;box-shadow:inset 0 5px 7px #fff9,inset 0 -9px 12px #000c,0 8px 11px #000d,0 0 12px #ffbd5a22!important}
+.draught-piece.red{background:radial-gradient(circle at 30% 20%,#ffe7c6,#398bc8 48%,#0b2948)!important;border-color:#f4bd77!important}
+.draught-piece.black{background:radial-gradient(circle at 30% 20%,#d4c4b6,#50434a 48%,#100d13)!important;border-color:#c5a77d!important}
+.particle{background:#ffb34d!important;box-shadow:0 0 13px 4px #ff6b2b88!important}
+@keyframes emberDrift{0%{transform:translate3d(0,0,0) scale(.7);opacity:0}15%{opacity:.9}100%{transform:translate3d(22px,-105vh,0) scale(1.5);opacity:0}}
+.particle{animation-name:emberDrift!important}
+@keyframes pieceIdle{0%,100%{filter:drop-shadow(0 3px 0 #28120d) drop-shadow(0 8px 5px #000d)}50%{filter:drop-shadow(0 3px 0 #28120d) drop-shadow(0 9px 8px #ff8b3530)}}
+.piece{animation:pieceIdle 3.8s ease-in-out infinite}
+.fg-move-ghost{position:fixed;z-index:9999;pointer-events:none;margin:0;display:grid;place-items:center;line-height:1;will-change:transform,opacity;}
+.fg-capture-ghost{position:fixed;z-index:9998;pointer-events:none;display:grid;place-items:center;line-height:1;will-change:transform,opacity;}
+@keyframes captureBurst{0%{opacity:1;transform:scale(1)}55%{opacity:.85;transform:scale(1.35) rotate(12deg)}100%{opacity:0;transform:scale(.15) rotate(-24deg)}}
+@media(max-width:560px){.chessboard,.checkers-board{border-width:4px!important;transform:none}.piece{animation:none}}
+@media(prefers-reduced-motion:reduce){.piece,.particle{animation:none!important}.fantasy-btn{transition:none!important}}
+
+
+/* 7.2 — Santuario de la dedicatoria: ornamentación cinematográfica */
+.dedication-wrap{
+  position:relative;isolation:isolate;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 48%,#8e3b291c 0,transparent 48%),
+             radial-gradient(ellipse at 50% 100%,#d39a3a16 0,transparent 58%);
+}
+.dedication-wrap:before,.dedication-wrap:after{
+  content:"✦  ·  ✧  ·  ✦";position:absolute;z-index:-1;
+  color:#e9bd6b55;letter-spacing:clamp(12px,4vw,38px);
+  font:clamp(18px,3vw,30px) Cinzel,serif;white-space:nowrap;
+  animation:dedicationDrift 12s ease-in-out infinite alternate;
+}
+.dedication-wrap:before{top:12%;left:50%;transform:translateX(-50%)}
+.dedication-wrap:after{bottom:10%;left:50%;transform:translateX(-50%);animation-delay:-5s}
+.book{
+  overflow:hidden;min-height:390px;
+  border:1px solid #e8c879;
+  border-radius:12px 24px 24px 12px;
+  background:
+    radial-gradient(ellipse at 50% 0%,#9e6b392b,transparent 55%),
+    linear-gradient(135deg,#30202a 0%,#151321 48%,#30202a 100%);
+  box-shadow:inset 14px 0 22px #0009,inset 0 0 0 5px #d7b46a0b,
+             inset 0 0 45px #d7a94a13,0 28px 90px #000d,0 0 55px #d9ad5530;
+}
+.book:after{
+  content:"";position:absolute;inset:10px;border:1px solid #d7b46a55;
+  border-radius:7px 18px 18px 7px;pointer-events:none;
+  box-shadow:inset 0 0 22px #d7b46a0b;
+}
+.book-ornament{
+  position:relative;color:#f3d58e;
+  text-shadow:0 0 10px #e8bd6b99,0 0 28px #d7a94a77;
+  animation:ornamentGlow 3.5s ease-in-out infinite alternate;
+}
+.book h2{
+  max-width:590px;margin:15px auto 12px;
+  color:#ffe8ad;text-shadow:0 2px 0 #5d3c1c,0 0 18px #e6b95e99,0 0 42px #d78e3b55;
+  letter-spacing:1px;
+}
+.book-signature{
+  display:inline-block;margin-top:15px;padding:9px 25px;
+  color:#fff0c9;font-size:clamp(17px,3vw,22px);letter-spacing:3px;
+  border-top:1px solid #d7b46a77;border-bottom:1px solid #d7b46a77;
+  text-shadow:0 0 16px #e7bd6b88;
+}
+.book-divider{height:2px;background:linear-gradient(90deg,transparent,#9b7135,#ffe5a0,#9b7135,transparent)}
+.book-message{color:#f0e3ca;text-shadow:0 1px 8px #000;}
+.book-footer{color:#e6c77e;letter-spacing:2px;text-shadow:0 0 12px #d7a94a66}
+@keyframes ornamentGlow{from{filter:brightness(.9);transform:scale(.98)}to{filter:brightness(1.25);transform:scale(1.04)}}
+@keyframes dedicationDrift{from{opacity:.35;filter:blur(.2px)}to{opacity:.85;filter:blur(0);letter-spacing:clamp(16px,5vw,44px)}}
+@media(max-width:560px){.book{min-height:0;padding:42px 22px}.book:after{inset:7px}.dedication-wrap:before{top:5%}.dedication-wrap:after{bottom:4%}}
+
+
+/* 7.3 — Apertura del grimorio: la dedicatoria se revela como un libro encantado */
+.dedication-wrap{
+  perspective:1500px;
+  perspective-origin:50% 45%;
+}
+.book{
+  transform-origin:50% 8%;
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+  animation:enchantedBookOpen 2.15s cubic-bezier(.18,.78,.2,1) both;
+}
+.book:before{
+  width:5px;
+  left:13px;
+  background:linear-gradient(90deg,#49301d,#f1d58d 42%,#8b5b2d 72%,transparent);
+  box-shadow:3px 0 9px #e9bd6b55;
+}
+.book:after{
+  animation:coverGlimmer 2.8s 1.35s ease-in-out both;
+}
+.book-ornament,.brand-kicker,.book h2,.book-signature,.book-divider,.book-message,.book-footer{
+  animation-delay:1.05s;
+}
+.book-ornament{animation-name:ornamentGlow,textAppear;animation-duration:3.5s,1.1s;animation-delay:1.1s,1.05s;animation-fill-mode:both,both}
+.book h2,.book-signature,.book-message{animation-name:textAppear}
+@keyframes enchantedBookOpen{
+  0%{opacity:0;transform:rotateX(-72deg) rotateY(-9deg) translateY(45px) scale(.88);filter:brightness(.45) blur(3px)}
+  48%{opacity:1;transform:rotateX(12deg) rotateY(3deg) translateY(-8px) scale(1.015);filter:brightness(1.18) blur(0)}
+  72%{transform:rotateX(-4deg) rotateY(-1deg) translateY(2px) scale(1)}
+  100%{opacity:1;transform:rotateX(0) rotateY(0) translateY(0) scale(1);filter:brightness(1)}
+}
+@keyframes coverGlimmer{
+  0%,100%{box-shadow:inset 0 0 22px #d7b46a0b}
+  45%{box-shadow:inset 0 0 30px #ffe7a044,0 0 24px #e6b95e55}
+}
+@media(prefers-reduced-motion:reduce){
+  .book{animation:none!important;transform:none!important}
+  .book:after,.book-ornament{animation:none!important}
+}
+@media(max-width:560px){
+  .dedication-wrap{perspective:1000px}
+  .book{transform-origin:50% 4%}
+}
+
+
+/* 7.4 — Forja de los dos reinos: plata/azul contra obsidiana/oro/azul */
+:root{
+  --realm-light:#dceeff;
+  --realm-light-hi:#f7fcff;
+  --realm-blue:#54baff;
+  --realm-blue-deep:#174d83;
+  --realm-dark:#17131b;
+  --realm-gold:#e4bd67;
+  --realm-red:#3f9cff;
+}
+#chessboard{
+  border:3px solid #8abfe9!important;
+  box-shadow:0 0 0 1px #e5f5ff88,0 0 22px #4baeff55,0 0 48px #080d18,inset 0 0 20px #000!important;
+}
+.square.light{
+  background:
+    linear-gradient(145deg,#f4fbff 0%,#c4def1 42%,#789fbe 100%)!important;
+  box-shadow:inset 1px 1px 0 #fff,inset -3px -3px 8px #193b5c66!important;
+}
+.square.dark{
+  background:
+    linear-gradient(145deg,#344b68 0%,#172b45 58%,#0a1525 100%)!important;
+  box-shadow:inset 1px 1px 0 #b9dcf333,inset -3px -3px 8px #000d!important;
+}
+.square.light:before,.square.dark:before{
+  border-color:#d9efff25!important;
+}
+.square:hover{
+  box-shadow:inset 0 0 20px #7bcaff88,inset 0 0 0 1px #e4f6ff!important;
+}
+.square.selected{
+  box-shadow:inset 0 0 0 3px #76caff,inset 0 0 25px #48aaff99!important;
+}
+.square.legal:after{
+  background:#a9e4ffbb!important;
+  box-shadow:0 0 0 2px #e9f8ff,0 0 14px #5abaff!important;
+}
+.square.capture:after{
+  border-color:#65baff!important;
+  box-shadow:0 0 16px #238ee9aa!important;
+}
+.piece{
+  display:inline-block;
+  transform:translateY(-2px);
+  transition:transform .2s,filter .2s;
+  -webkit-text-stroke:.35px #fff8;
+}
+.piece.white{
+  color:#e9f6ff!important;
+  background:linear-gradient(180deg,#fff 4%,#dff2ff 35%,#83b9df 72%,#39749f 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 1px 0 #fff,0 3px 0 #80a9c6,0 5px 0 #315875,0 8px 8px #000e,0 0 13px #7acaff!important;
+  filter:drop-shadow(0 0 5px #70c8ff99) drop-shadow(0 7px 4px #000d)!important;
+}
+.piece.black{
+  color:#17131b!important;
+  background:linear-gradient(180deg,#fff0c3 0%,#d9a83f 24%,#77501d 58%,#21151a 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 1px 0 #ffe9a9,0 3px 0 #9a6c28,0 5px 0 #382317,0 8px 9px #000!important;
+  filter:drop-shadow(0 0 6px #54aaff99) drop-shadow(0 7px 4px #000e)!important;
+}
+.square.selected .piece{transform:translateY(-7px) scale(1.16)!important}
+.draught-piece.white,.checkers-dot.white{
+  background:radial-gradient(circle at 28% 20%,#fff 0%,#d9efff 28%,#78b5df 58%,#28547a 100%)!important;
+  border:2px solid #b9e4ff!important;
+  color:#f8fdff!important;
+  box-shadow:inset 0 2px 4px #fff,inset 0 -5px 8px #173a5c99,0 4px 9px #000b,0 0 12px #59baff55!important;
+  text-shadow:0 2px 3px #16456b!important;
+}
+.draught-piece.black,.checkers-dot.black{
+  background:radial-gradient(circle at 28% 18%,#fff0c4 0%,#d8a747 25%,#69451e 58%,#171018 100%)!important;
+  border:2px solid #e8c16d!important;
+  color:#fff0c2!important;
+  box-shadow:inset 0 2px 4px #fff7,inset 0 -5px 8px #160e16,0 4px 9px #000c,0 0 12px #ff3c4c66!important;
+  text-shadow:0 2px 3px #321c12!important;
+}
+.draught-piece.king:after{color:#fff0ad!important;text-shadow:0 0 5px #ffcf68,0 2px 4px #24130d!important}
+.player-card{
+  border-color:#a8d9ff55!important;
+  box-shadow:inset 0 1px #fff2,0 0 14px #4aaeff22,0 8px 18px #0008!important;
+}
+.player-card.active-player{
+  border-color:#78caff!important;
+  box-shadow:inset 0 0 18px #4db8ff22,0 0 18px #55baff66!important;
+}
+
+
+/* ---------- 7.6: PIEZAS DE AJEDREZ SIN CONTORNO CUADRADO ---------- */
+/* El acabado se aplica únicamente al glifo: nunca a una caja rectangular. */
+.chessboard .piece{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background-color:transparent!important;
+  -webkit-box-decoration-break:clone;
+  box-decoration-break:clone;
+}
+.chessboard .piece.white,
+.chessboard .piece.black{
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ---------- 7.5: PERSONALIZACIÓN DEL ARSENAL ---------- */
+.settings-grid{max-width:1050px}
+.settings-section{grid-column:1/-1}
+.settings-note{font-size:11px;line-height:1.6;color:var(--muted);margin:4px 0 12px}
+.settings-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.field select,.field input[type=range]{accent-color:#d7b46a}
+:root[data-chess-palette="silver"] .piece.white{background:linear-gradient(180deg,#fff 0%,#e5f5ff 32%,#8bc8ed 67%,#326b9d 100%);text-shadow:0 1px 0 #fff,0 3px 0 #80b7d9,0 6px 0 #315875,0 8px 8px #000e,0 0 15px #66c5ff!important;filter:drop-shadow(0 0 6px #70c8ffbb) drop-shadow(0 7px 4px #000d)!important}
+:root[data-chess-palette="silver"] .piece.black{background:linear-gradient(180deg,#fff0c3 0%,#d9a83f 24%,#77501d 58%,#21151a 100%)}
+:root[data-chess-palette="ivory"] .piece.white{background:linear-gradient(180deg,#fffef1,#f4e5b9 45%,#a88c59)!important;text-shadow:0 1px #fff,0 4px 0 #b7a06e,0 7px 8px #000!important;filter:drop-shadow(0 0 5px #ffe8a0aa)!important}
+:root[data-chess-palette="ivory"] .piece.black{background:linear-gradient(180deg,#fff,#b8b5ad 35%,#55545b 75%,#17151d)!important;text-shadow:0 2px #ddd,0 5px #333,0 8px 8px #000!important;filter:drop-shadow(0 0 5px #ffffff55)!important}
+:root[data-chess-palette="emerald"] .piece.white{background:linear-gradient(180deg,#f4ffe8,#a6d88b 38%,#3d8a58 78%,#153d2b)!important;text-shadow:0 2px #d8ffc7,0 5px #39734a,0 8px 8px #000!important;filter:drop-shadow(0 0 6px #76ff9b99)!important}
+:root[data-chess-palette="emerald"] .piece.black{background:linear-gradient(180deg,#f4e7c4,#b28a42 36%,#59401e 72%,#171018)!important}
+:root[data-chess-white="ivory"] .piece.white{background:linear-gradient(180deg,#fffef1,#f4e5b9 45%,#a88c59)!important}
+:root[data-chess-white="emerald"] .piece.white{background:linear-gradient(180deg,#f4ffe8,#a6d88b 38%,#3d8a58 78%,#153d2b)!important}
+:root[data-chess-black="steel"] .piece.black{background:linear-gradient(180deg,#dce8ef,#788a98 35%,#303c49 70%,#0d121a)!important}
+:root[data-chess-black="crimson"] .piece.black{background:linear-gradient(180deg,#ffe0d8,#d34d52 32%,#681d2b 68%,#130b12)!important}
+:root[data-draught-palette="classic"] .draught-piece.red{background:radial-gradient(circle at 28% 20%,#e9f7ff,#398bc8 54%,#0b2948)!important;border-color:#b9e5ff!important}
+:root[data-draught-palette="classic"] .draught-piece.black{background:radial-gradient(circle at 28% 20%,#b8d4ef,#334b6c 52%,#101b2d)!important;border-color:#9ec8ec!important}
+:root[data-draught-palette="royal"] .draught-piece.red{background:radial-gradient(circle at 28% 20%,#fff0c4,#d8a747 25%,#69451e 58%,#171018)!important;border-color:#e8c16d!important}
+:root[data-draught-palette="royal"] .draught-piece.black{background:radial-gradient(circle at 28% 20%,#e8f5ff,#8eb6d4 30%,#34516e 65%,#101827)!important;border-color:#a8d9ff!important}
+:root[data-draught-palette="arcane"] .draught-piece.red{background:radial-gradient(circle at 28% 20%,#f4e5ff,#a56bd1 38%,#42205f 75%,#160d22)!important;border-color:#d6a7ff!important}
+:root[data-draught-palette="arcane"] .draught-piece.black{background:radial-gradient(circle at 28% 20%,#e3ffff,#45aeb1 35%,#14545b 72%,#08191d)!important;border-color:#8df3e8!important}
+:root[data-draught-shape="gem"] .draught-piece{border-radius:28%!important;transform:rotate(45deg) scale(.88);}
+:root[data-draught-shape="gem"] .draught-piece.king:after{transform:rotate(-45deg);display:block}
+:root[data-draught-shape="rune"] .draught-piece{border-radius:36%!important;border-style:double!important;border-width:4px!important}
+:root[data-draught-shape="rune"] .draught-piece.king:after{content:'✦'!important}
+:root[data-hints="off"] .square.legal:after{display:none!important}
+@media(max-width:560px){.settings-section{grid-column:auto}.settings-actions>*{flex:1}}
+:root.reduced-motion *, :root.reduced-motion *:before, :root.reduced-motion *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+
+
+
+/* ---------- 7.7: FIGURAS LEGENDARIAS — ACABADO LIMPIO EN AMBOS BANDOS ---------- */
+/* Elimina cualquier caja, borde o fondo rectangular de TODAS las piezas. */
+#chessboard .piece,
+#chessboard .piece.white,
+#chessboard .piece.black{
+  display:inline-block!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background-color:transparent!important;
+  background-clip:text!important;
+  -webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:0!important;
+  text-decoration:none!important;
+  line-height:1!important;
+  isolation:isolate;
+}
+#chessboard .piece.white{
+  background-image:linear-gradient(180deg,#ffffff 0%,#e8f7ff 28%,#8dc9ef 62%,#39749f 100%)!important;
+  text-shadow:0 1px 0 #fff,0 3px 0 #80b7d9,0 6px 0 #315875,0 8px 8px #000e,0 0 14px #72caff!important;
+  filter:drop-shadow(0 0 5px #70c8ff99) drop-shadow(0 7px 4px #000d)!important;
+}
+#chessboard .piece.black{
+  background-image:linear-gradient(180deg,#fff0c3 0%,#d9a83f 24%,#77501d 58%,#21151a 100%)!important;
+  text-shadow:0 1px 0 #ffe9a9,0 3px 0 #9a6c28,0 5px 0 #382317,0 8px 9px #000!important;
+  filter:drop-shadow(0 0 6px #54aaff77) drop-shadow(0 7px 4px #000e)!important;
+}
+/* Identidad visual por rango: cada figura tiene un tratamiento propio. */
+#chessboard .piece-king{ text-shadow:0 0 5px #fff3b0,0 2px 0 #d6ad55,0 5px 0 #76521e,0 9px 10px #000!important; }
+#chessboard .piece-queen{ filter:drop-shadow(0 0 7px #d9a7ff88) drop-shadow(0 7px 4px #000d)!important; }
+#chessboard .piece-rook{ text-shadow:0 2px 0 #b8c8d4,0 5px 0 #536777,0 8px 9px #000!important; }
+#chessboard .piece-bishop{ filter:drop-shadow(0 0 7px #8fe6ff99) drop-shadow(0 7px 4px #000d)!important; }
+#chessboard .piece-knight{ filter:drop-shadow(0 0 8px #ffbd6b88) drop-shadow(0 7px 4px #000d)!important; }
+#chessboard .piece-pawn{ filter:drop-shadow(0 0 4px #ffffff55) drop-shadow(0 6px 4px #000d)!important; }
+/* Entrada sutil y respuesta cinematográfica al seleccionar/mover. */
+@keyframes legendaryPieceEnter{from{opacity:.35;transform:translateY(8px) scale(.82)}to{opacity:1;transform:translateY(-2px) scale(1)}}
+#chessboard .piece{animation:legendaryPieceEnter .24s ease-out both, pieceIdle 3.8s ease-in-out .24s infinite;}
+#chessboard .square.last-move .piece{filter:drop-shadow(0 0 9px #ffd36a) drop-shadow(0 7px 4px #000d)!important;}
+#chessboard .square.selected .piece{transform:translateY(-9px) scale(1.18)!important;filter:drop-shadow(0 0 13px #ffe08a) drop-shadow(0 8px 5px #000d)!important;}
+@media(prefers-reduced-motion:reduce){#chessboard .piece{animation:none!important}}
+
+
+
+/* ===== FANTASY GAMES 8.0 — PALETAS REPARADAS + VOLUMEN 3D ===== */
+:root{--realm-red:#3f9cff;--red:#287fce}
+/* Todos los brillos de selección/captura pasan a la familia azul. */
+.square.capture:after{border-color:#65baff!important;box-shadow:0 0 16px #238ee9aa!important}
+#chessboard .piece.black{filter:drop-shadow(0 0 6px #54aaff88) drop-shadow(0 8px 4px #000e)!important}
+/* El glifo conserva fondo transparente: el volumen se dibuja en el propio símbolo. */
+#chessboard .piece{
+  background-color:transparent!important;border:0!important;outline:0!important;border-radius:0!important;
+  box-shadow:none!important;line-height:1!important;position:relative;isolation:isolate;
+  -webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;
+  transform:translateY(-2px);transition:transform .22s ease,filter .22s ease;
+}
+/* Acabados independientes: ahora ninguna opción queda anulada por la paleta global. */
+:root[data-chess-white="silver"] #chessboard .piece.white{
+ background-image:linear-gradient(180deg,#ffffff 0%,#e9f8ff 23%,#9dd9ff 48%,#4c91c4 73%,#21496d 100%)!important;
+ text-shadow:0 1px 0 #fff,0 2px 0 #d5f0ff,0 4px 0 #78b5dc,0 7px 0 #315d7e,0 10px 9px #000!important;
+ filter:drop-shadow(0 0 7px #5fc2ffbb) drop-shadow(0 8px 4px #000d)!important;
+}
+:root[data-chess-white="ivory"] #chessboard .piece.white{
+ background-image:linear-gradient(180deg,#fffef3 0%,#f7edcf 28%,#d3c08d 60%,#827044 100%)!important;
+ text-shadow:0 1px 0 #fff,0 3px 0 #e2d3a8,0 6px 0 #9b8658,0 9px 9px #000!important;
+ filter:drop-shadow(0 0 6px #f7e5a477) drop-shadow(0 8px 4px #000d)!important;
+}
+:root[data-chess-white="emerald"] #chessboard .piece.white{
+ background-image:linear-gradient(180deg,#f1ffe9 0%,#b5ed9b 28%,#64b879 62%,#20583d 100%)!important;
+ text-shadow:0 1px 0 #f3ffe8,0 3px 0 #a6dc9b,0 6px 0 #397c53,0 9px 9px #000!important;
+ filter:drop-shadow(0 0 7px #70e69a99) drop-shadow(0 8px 4px #000d)!important;
+}
+:root[data-chess-black="gold"] #chessboard .piece.black{
+ background-image:linear-gradient(180deg,#fff4ca 0%,#e8bd59 24%,#a8792e 53%,#4b321c 78%,#17131b 100%)!important;
+ text-shadow:0 1px 0 #fff1c3,0 3px 0 #d5a74a,0 6px 0 #76501f,0 9px 9px #000!important;
+ filter:drop-shadow(0 0 7px #e8b64a88) drop-shadow(0 8px 4px #000e)!important;
+}
+:root[data-chess-black="steel"] #chessboard .piece.black{
+ background-image:linear-gradient(180deg,#f5fbff 0%,#b9cbd9 25%,#71889d 55%,#35485c 78%,#101722 100%)!important;
+ text-shadow:0 1px 0 #fff,0 3px 0 #c2d6e5,0 6px 0 #526a7e,0 9px 9px #000!important;
+ filter:drop-shadow(0 0 7px #9dc9e788) drop-shadow(0 8px 4px #000e)!important;
+}
+:root[data-chess-black="blue"] #chessboard .piece.black{
+ background-image:linear-gradient(180deg,#e9f8ff 0%,#71c5ff 25%,#247bbd 55%,#123c70 78%,#071526 100%)!important;
+ text-shadow:0 1px 0 #e9f8ff,0 3px 0 #67b5eb,0 6px 0 #164d80,0 9px 9px #000!important;
+ filter:drop-shadow(0 0 8px #269effbb) drop-shadow(0 8px 4px #000e)!important;
+}
+/* Personalidad por rango, con reflejos fríos y profundidad en cada silueta. */
+#chessboard .piece-king{ text-shadow:0 0 5px #fff5c7,0 2px 0 #f3d88a,0 5px 0 #9b7736,0 9px 10px #000!important; }
+#chessboard .piece-queen{ filter:drop-shadow(0 0 9px #a9a4ffbb) drop-shadow(0 8px 4px #000d)!important; }
+#chessboard .piece-rook{ text-shadow:0 1px 0 #fff,0 3px 0 #b9cbd8,0 6px 0 #536b80,0 9px 9px #000!important; }
+#chessboard .piece-bishop{ filter:drop-shadow(0 0 8px #83e3ffbb) drop-shadow(0 8px 4px #000d)!important; }
+#chessboard .piece-knight{ filter:drop-shadow(0 0 8px #78baffbb) drop-shadow(0 8px 4px #000d)!important; }
+#chessboard .piece-pawn{ filter:drop-shadow(0 0 5px #d4f1ff88) drop-shadow(0 7px 4px #000d)!important; }
+/* Fichas: tres paletas completamente azules/oro, sin variantes rojas. */
+.draught-piece.red,.checkers-dot.red{background:radial-gradient(circle at 28% 18%,#f2fbff 0%,#78caff 30%,#267fc1 62%,#0c2948 100%)!important;border:2px solid #bce8ff!important;color:#effaff!important;box-shadow:inset 0 3px 5px #fff,inset 0 -7px 10px #09213d,0 7px 10px #000b,0 0 13px #4ab5ff66!important;text-shadow:0 2px 3px #123b5c!important}
+.draught-piece.black,.checkers-dot.black{background:radial-gradient(circle at 28% 18%,#eaf7ff 0%,#829bb5 28%,#354d6b 62%,#0a1424 100%)!important;border:2px solid #b3d8f2!important;color:#eff8ff!important;box-shadow:inset 0 3px 5px #fff,inset 0 -7px 10px #07111f,0 7px 10px #000b,0 0 12px #4b9bd455!important;text-shadow:0 2px 3px #07111f!important}
+:root[data-draught-palette="classic"] .draught-piece.red{background:radial-gradient(circle at 28% 18%,#f2fbff,#69c5ff 34%,#267fc1 66%,#0b2948)!important;border-color:#c5edff!important}
+:root[data-draught-palette="classic"] .draught-piece.black{background:radial-gradient(circle at 28% 18%,#d8efff,#6987a7 34%,#263f5e 68%,#091525)!important;border-color:#a9d7f5!important}
+:root[data-draught-palette="royal"] .draught-piece.red{background:radial-gradient(circle at 28% 18%,#fff4ca,#e8bd59 30%,#956a2b 66%,#281b16)!important;border-color:#f1d58b!important}
+:root[data-draught-palette="royal"] .draught-piece.black{background:radial-gradient(circle at 28% 18%,#f1fbff,#9fc9e8 32%,#426b91 66%,#101d30)!important;border-color:#c4e7ff!important}
+:root[data-draught-palette="arcane"] .draught-piece.red{background:radial-gradient(circle at 28% 18%,#e9e6ff,#7f8cff 34%,#3c4ca4 70%,#15183d)!important;border-color:#c6caff!important}
+:root[data-draught-palette="arcane"] .draught-piece.black{background:radial-gradient(circle at 28% 18%,#e4ffff,#4acbd4 34%,#176b85 70%,#071e2b)!important;border-color:#9df5ff!important}
+/* Los interruptores de animación ahora controlan también la animación de reposo/entrada. */
+:root[data-animations="off"] #chessboard .piece,:root[data-animations="off"] #particles .particle{animation:none!important;transition:none!important}
+:root[data-animations="off"] .fantasy-btn{transition:none!important}
+:root[data-animations="on"] #chessboard .piece{animation:legendaryPieceEnter .24s ease-out both,pieceIdle 3.8s ease-in-out .24s infinite}
+:root[data-animations="off"]{scroll-behavior:auto}
+
+
+
+/* ===== FANTASY GAMES 8.0 — AJUSTES FUNCIONALES Y PROFUNDIDAD ===== */
+:root{
+ --tile-light-1:#f4fbff;--tile-light-2:#c4def1;--tile-light-3:#789fbe;
+ --tile-dark-1:#344b68;--tile-dark-2:#172b45;--tile-dark-3:#0a1525;
+}
+/* Los cuatro temas cambian realmente ambos tableros, sin quedar anulados por reglas antiguas. */
+#chessboard .square.light,#chinese-board .square.light{
+ background:linear-gradient(145deg,var(--tile-light-1) 0%,var(--tile-light-2) 48%,var(--tile-light-3) 100%)!important;
+ box-shadow:inset 1px 1px 0 #fff,inset -4px -4px 9px #102b4566!important;
+}
+#chessboard .square.dark,#chinese-board .square.dark{
+ background:linear-gradient(145deg,var(--tile-dark-1) 0%,var(--tile-dark-2) 58%,var(--tile-dark-3) 100%)!important;
+ box-shadow:inset 1px 1px 0 #d9efff30,inset -4px -4px 9px #000d!important;
+}
+/* Siluetas con extrusión de luz/sombra para simular volumen, no una caja alrededor del glifo. */
+#chessboard .piece{
+ display:inline-block!important;padding:0!important;margin:0!important;border:0!important;outline:0!important;
+ border-radius:0!important;background-color:transparent!important;box-shadow:none!important;
+ -webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;
+ -webkit-text-stroke:0!important;line-height:1!important;transform:translateY(-2px);
+}
+#chessboard .piece.white{
+ text-shadow:0 -1px 0 #fff,0 1px 0 #e9f8ff,0 3px 0 #9bc8e5,0 5px 0 #5d8fb4,0 7px 0 #315b7d,0 10px 10px #000e!important;
+ filter:drop-shadow(0 0 7px #66c4ff99) drop-shadow(0 8px 4px #000d)!important;
+}
+#chessboard .piece.black{
+ text-shadow:0 -1px 0 #fff4d0,0 1px 0 #e5c36e,0 3px 0 #b18439,0 5px 0 #68471f,0 7px 0 #261b18,0 10px 10px #000!important;
+ filter:drop-shadow(0 0 7px #5dbaff88) drop-shadow(0 8px 4px #000e)!important;
+}
+#chessboard .piece-king{ text-shadow:0 -1px 0 #fff7d6,0 2px 0 #e5c16a,0 5px 0 #9b7736,0 8px 0 #4b321c,0 11px 11px #000!important; }
+#chessboard .piece-queen{ filter:drop-shadow(0 0 10px #b8b4ffbb) drop-shadow(0 8px 4px #000d)!important; }
+#chessboard .piece-rook{ text-shadow:0 -1px 0 #fff,0 2px 0 #c2d6e5,0 5px 0 #71899c,0 8px 0 #34495c,0 11px 10px #000!important; }
+#chessboard .piece-bishop{ filter:drop-shadow(0 0 9px #83e3ffbb) drop-shadow(0 8px 4px #000d)!important; }
+#chessboard .piece-knight{ filter:drop-shadow(0 0 10px #78baffbb) drop-shadow(0 8px 4px #000d)!important; }
+#chessboard .piece-pawn{ filter:drop-shadow(0 0 6px #d4f1ff99) drop-shadow(0 7px 4px #000d)!important; }
+/* Corrección de color: ningún ejército usa rojo; rojo histórico de damas ahora es azul hielo. */
+:root{--red:#287fce;--realm-red:#3f9cff}
+.draught-piece.red,.checkers-dot.red{background:radial-gradient(circle at 25% 18%,#f4fcff 0%,#83d0ff 28%,#287fc1 62%,#092747 100%)!important;border:2px solid #c4ecff!important;color:#f2fbff!important;box-shadow:inset 0 3px 5px #fff,inset 0 -7px 10px #09213d,0 7px 10px #000b,0 0 14px #4ab5ff77!important}
+.draught-piece.black,.checkers-dot.black{background:radial-gradient(circle at 25% 18%,#edf8ff 0%,#8caac8 28%,#3b5878 62%,#091629 100%)!important;border:2px solid #c1e3ff!important;color:#f2fbff!important;box-shadow:inset 0 3px 5px #fff,inset 0 -7px 10px #07111f,0 7px 10px #000b,0 0 13px #4b9bd477!important}
+:root[data-draught-palette="classic"] .draught-piece.red{background:radial-gradient(circle at 25% 18%,#f4fcff,#83d0ff 32%,#287fc1 68%,#092747)!important;border-color:#c4ecff!important}
+:root[data-draught-palette="classic"] .draught-piece.black{background:radial-gradient(circle at 25% 18%,#edf8ff,#8caac8 32%,#3b5878 68%,#091629)!important;border-color:#c1e3ff!important}
+:root[data-draught-palette="royal"] .draught-piece.red{background:radial-gradient(circle at 25% 18%,#fff7d7,#e9c36d 30%,#987039 68%,#2a2117)!important;border-color:#f4dda1!important}
+:root[data-draught-palette="royal"] .draught-piece.black{background:radial-gradient(circle at 25% 18%,#f2fbff,#a5c9e6 32%,#456c91 68%,#101d30)!important;border-color:#c9eaff!important}
+:root[data-draught-palette="arcane"] .draught-piece.red{background:radial-gradient(circle at 25% 18%,#eef0ff,#829bff 34%,#4056ae 70%,#141b46)!important;border-color:#cbd3ff!important}
+:root[data-draught-palette="arcane"] .draught-piece.black{background:radial-gradient(circle at 25% 18%,#e8ffff,#4acbd4 34%,#176b85 70%,#071e2b)!important;border-color:#9df5ff!important}
+:root[data-animations="off"] #chessboard .piece,:root[data-animations="off"] #particles .particle{animation:none!important;transition:none!important}
+:root.reduced-motion #chessboard .piece,:root.reduced-motion #particles .particle{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){#chessboard .piece{animation:none!important;transition:none!important}}
+
+
+
+/* =========================================================
+   FANTASY GAMES 8.0 — REINOS CINEMATOGRÁFICOS
+   Capa visual: conserva el motor 7.9 y sus controles.
+   ========================================================= */
+:root{
+  --gold:#d8bd7d;--gold-light:#fff0c5;--gold-dark:#806333;
+  --bg:#050b17;--panel:#0c1729;--panel2:#14243a;
+  --text:#edf5ff;--muted:#9eafc6;
+  --tile-light:#d9e7f4;--tile-dark:#263d5b;
+}
+body{
+  background:
+    radial-gradient(ellipse at 50% 5%,#36577a66 0%,transparent 35%),
+    radial-gradient(ellipse at 8% 52%,#17639a30 0%,transparent 34%),
+    radial-gradient(ellipse at 92% 75%,#b18a3b20 0%,transparent 32%),
+    linear-gradient(145deg,#030711 0%,#0b1729 46%,#070d19 100%)!important;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.28;
+  background:linear-gradient(115deg,transparent 0 42%,#8fcaff0b 48%,transparent 54%),
+             repeating-linear-gradient(90deg,transparent 0 79px,#b9d9ff08 80px,transparent 81px);
+  mask-image:linear-gradient(to bottom,#000,transparent 90%);
+}
+#app{isolation:isolate}
+.screen{position:relative}
+.brand{position:relative;max-width:980px;padding:28px 18px 20px}
+.brand:before{
+  content:"";position:absolute;inset:0 8% 5%;z-index:-1;border-radius:50%;
+  background:radial-gradient(ellipse,#4c8fc52b,transparent 68%);filter:blur(18px)
+}
+.brand-kicker{color:#9ed5ff!important;letter-spacing:6px;text-shadow:0 0 18px #55aaff77}
+.brand h1{
+  color:#f0f6ff!important;
+  background:linear-gradient(180deg,#fff 0%,#d6e9ff 42%,#8db9e4 75%,#e4c987 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 7px 12px #000d);text-shadow:none!important;
+}
+.brand h1 span{color:#d7eaff;-webkit-text-fill-color:#d7eaff;text-shadow:0 0 22px #64baff55;letter-spacing:7px}
+.brand-subtitle{color:#c4d7ec!important}
+.gold-line{background:linear-gradient(90deg,transparent,#8ccfff,#e2c27d,#8ccfff,transparent)!important}
+.screen-heading,.panel-title,.turn-label,.topbar-brand{color:#d9eaff!important;text-shadow:0 0 16px #63b7ff35}
+.panel,.player-card{
+  background:linear-gradient(145deg,#172a42f2 0%,#0b1729f5 58%,#101d31f5 100%)!important;
+  border:1px solid #8ab9df66!important;border-radius:13px!important;
+  box-shadow:0 22px 60px #000c,inset 0 1px #ffffff18,inset 0 0 32px #61baff0b!important;
+  backdrop-filter:blur(9px)
+}
+.fantasy-btn{
+  color:#eaf5ff!important;border:1px solid #86bce688!important;
+  background:linear-gradient(145deg,#243d5b,#101e32 72%)!important;
+  box-shadow:0 9px 24px #0008,inset 0 1px #ffffff20,0 0 15px #398ac51a!important;
+}
+.fantasy-btn:hover{border-color:#d8bd7d!important;box-shadow:0 12px 30px #000b,0 0 22px #64baff3d!important}
+.fantasy-btn.primary{
+  color:#fff4d6!important;border-color:#f0d18c!important;
+  background:linear-gradient(135deg,#8b7448,#4a5d75 55%,#1b3857)!important;
+}
+.fantasy-btn.danger{border-color:#578fc1!important;color:#d9edff!important}
+.chessboard,.checkers-board{
+  border:9px solid transparent!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#8fb8d8,#314d6c 42%,#101c2c) padding-box,
+             linear-gradient(135deg,#e6d19a,#5e9bc9 35%,#172e49 70%,#d4b978) border-box!important;
+  box-shadow:0 30px 70px #000e,0 0 35px #4da7e633,inset 0 0 0 2px #ffffff30!important;
+  position:relative
+}
+.square.light{
+  background:linear-gradient(145deg,#edf5fb 0%,#c5d8e8 58%,#91abc3 100%)!important;
+  box-shadow:inset 1px 1px #fff,inset -3px -3px 8px #34516b55!important
+}
+.square.dark{
+  background:linear-gradient(145deg,#496988 0%,#263f5b 58%,#14263b 100%)!important;
+  box-shadow:inset 1px 1px #ffffff32,inset -3px -3px 8px #000b!important
+}
+.square:before{border:1px solid #d7eaff18!important}
+.square:hover{filter:brightness(1.22)!important;box-shadow:inset 0 0 24px #8bd3ff88,inset 0 0 0 1px #e3f5ff!important}
+.square.selected{box-shadow:inset 0 0 0 4px #f1d48c,0 0 20px #8bcaff88!important}
+.square.legal:after{background:#9be4ff99!important;box-shadow:0 0 0 2px #eaf8ff,0 0 16px #63c8ff!important}
+.square.capture:after{border-color:#e7ca86!important;box-shadow:0 0 16px #f1d48c!important}
+.square.last-move{background-image:linear-gradient(#8ccaff40,#8ccaff40)!important}
+.square.in-check{box-shadow:inset 0 0 0 5px #83caff!important;animation:checkPulse 1s infinite alternate}
+.piece{
+  font-size:clamp(27px,5.2vw,61px)!important;line-height:1!important;
+  transform:translateY(-1px);filter:drop-shadow(0 5px 2px #000c) drop-shadow(0 0 7px #8dcaff44)!important;
+}
+.piece.white{
+  color:#f7fbff!important;
+  text-shadow:0 1px 0 #fff,0 3px 0 #9bb9d4,0 5px 1px #45627f,0 8px 8px #000d,0 0 16px #d9efff!important;
+}
+.piece.black{
+  color:#17283e!important;
+  text-shadow:0 1px 0 #d7eaff,0 3px 0 #617f9e,0 6px 1px #091322,0 9px 9px #000e,0 0 14px #67baff88!important;
+}
+.square.selected .piece{transform:translateY(-8px) scale(1.16)!important}
+.draught-piece{
+  border-width:3px!important;
+  box-shadow:inset 0 5px 7px #fff9,inset 0 -9px 12px #000c,0 8px 11px #000d,0 0 14px #69bfff33!important;
+}
+.draught-piece.red{
+  background:radial-gradient(circle at 28% 18%,#f7fcff 0%,#9cc9eb 28%,#3977a8 62%,#102b48 100%)!important;
+  border-color:#d8efff!important;color:#f4fbff!important
+}
+.draught-piece.black{
+  background:radial-gradient(circle at 28% 18%,#d6e7f6 0%,#526f91 35%,#1c304a 68%,#091522 100%)!important;
+  border-color:#a9c9e7!important;color:#e9f5ff!important
+}
+.draught-piece.king:after{color:#fff0b8!important;text-shadow:0 0 7px #f1d48c,0 2px 4px #17283e!important}
+.player-card.active-player{border-color:#c7e8ff!important;box-shadow:0 0 0 1px #b9e0ff66,0 0 25px #55baff33!important}
+.modal{background:linear-gradient(145deg,#1b304a,#0a1628)!important;border:1px solid #8fc4ec88!important;box-shadow:0 25px 80px #000e,0 0 35px #59b5f044!important}
+input,select{background:#0c1a2d!important;color:#eaf5ff!important;border-color:#527da4!important}
+.muted{color:#a9bed4!important}
+#check-status{color:#9fd7ff!important}
+@media(max-width:760px){
+ .screen{padding:18px 12px 36px}.brand{margin:10px auto 20px;padding:20px 8px}
+ .brand h1 span{letter-spacing:3px}.panel{padding:15px}
+ .chessboard,.checkers-board{border-width:6px!important}
+}
+@media(prefers-reduced-motion:reduce){.brand:before,body:before{display:none}}
+
+
+
+/* FANTASY GAMES 8.1 — efectos selectos heredados de Fantasy Chess 2.0.
+   Se conservan intactos los colores, fondos, paneles y estructura visual de 8.0. */
+body:after{
+  content:"";position:fixed;inset:-35%;z-index:0;pointer-events:none;opacity:.34;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%,rgba(255,231,174,.75) 50%,transparent 100%),
+    radial-gradient(1px 1px at 70% 60%,rgba(167,196,255,.72) 50%,transparent 100%),
+    radial-gradient(2px 2px at 45% 80%,rgba(124,176,255,.58) 50%,transparent 100%);
+  background-size:280px 260px,360px 330px,420px 390px;
+  animation:fgStarsDrift 58s linear infinite;
+}
+@keyframes fgStarsDrift{to{transform:translate3d(70px,-80px,0)}}
+.menu-wrap{position:relative;isolation:isolate}
+.menu-wrap:before{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  width:min(78vw,760px);aspect-ratio:1;left:50%;top:50%;
+  transform:translate(-50%,-50%);border:1px solid rgba(145,190,235,.13);
+  border-radius:50%;
+  box-shadow:0 0 0 26px rgba(145,190,235,.025),0 0 0 54px rgba(217,182,109,.018),
+    inset 0 0 90px rgba(124,176,255,.075);
+  animation:fgRuneOrbit 100s linear infinite;
+}
+@keyframes fgRuneOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.fantasy-btn{transition:transform .25s,border-color .25s,box-shadow .25s,filter .25s}
+.fantasy-btn:hover{transform:translateY(-3px);filter:brightness(1.1)}
+.chessboard{perspective:1000px;transform-style:preserve-3d}
+.chessboard .square{transition:filter .2s,transform .2s}
+.chessboard .piece{filter:drop-shadow(2px 7px 3px rgba(0,0,0,.62))}
+.chessboard .square.selected .piece{transform:translateY(-7px) scale(1.14)}
+@media(prefers-reduced-motion:reduce){
+  body:after,.menu-wrap:before{animation:none!important}
+}
+
+
+
+/* ==========================================================
+   FANTASY GAMES 8.1 — FORJA 3D DE LAS PIEZAS
+   Solo afecta a las piezas; conserva paletas, tablero y menús.
+   ========================================================== */
+#chessboard{transform-style:preserve-3d}
+#chessboard .square{transform-style:preserve-3d}
+#chessboard .piece{
+  position:relative;display:inline-block;transform:translateY(-2px) translateZ(7px);
+  transform-origin:50% 75%;backface-visibility:hidden;
+  -webkit-text-stroke:.45px rgba(8,18,32,.42);
+  transition:transform .24s cubic-bezier(.2,.8,.2,1),filter .24s ease;
+  will-change:transform,filter;
+}
+/* Plata y zafiro: bisel frío y profundidad metálica. */
+:root[data-chess-white="silver"] #chessboard .piece.white{
+  text-shadow:0 -1px 0 #fff,0 1px 0 #eaf8ff,0 3px 0 #b4d9ef,
+    0 5px 0 #6d9fc2,0 7px 0 #315d7e,0 10px 9px #000d,
+    0 0 16px #66c5ff99!important;
+  filter:drop-shadow(0 2px 1px #e9f8ff88) drop-shadow(0 9px 5px #000d)
+    drop-shadow(0 0 7px #5fc2ff77)!important;
+}
+/* Oro antiguo y obsidiana: relieve cálido, sin introducir rojo. */
+:root[data-chess-black="gold"] #chessboard .piece.black{
+  text-shadow:0 -1px 0 #fff4d2,0 1px 0 #f5d98b,0 3px 0 #d3a54b,
+    0 5px 0 #93652b,0 7px 0 #4b321c,0 10px 10px #000e,
+    0 0 14px #e8bd5988!important;
+  filter:drop-shadow(0 2px 1px #fff0c477) drop-shadow(0 9px 5px #000e)
+    drop-shadow(0 0 7px #dba94366)!important;
+}
+#chessboard .square.selected .piece{
+  transform:translateY(-9px) translateZ(15px) scale(1.16) rotateX(5deg)!important;
+  filter:drop-shadow(0 0 8px #8ed5ffcc) drop-shadow(0 12px 7px #000e)!important;
+}
+#chessboard .square:focus-visible .piece{
+  transform:translateY(-4px) translateZ(10px) scale(1.06);
+}
+/* Cada rango recibe un brillo propio sin cambiar su glifo ni su color. */
+#chessboard .piece-king{filter:drop-shadow(0 0 8px #ffe7a088) drop-shadow(0 10px 5px #000d)!important}
+#chessboard .piece-queen{filter:drop-shadow(0 0 9px #a9caff99) drop-shadow(0 9px 5px #000d)!important}
+#chessboard .piece-rook{filter:drop-shadow(0 2px 1px #dceeff66) drop-shadow(0 9px 5px #000d)!important}
+#chessboard .piece-bishop{filter:drop-shadow(0 0 8px #8bdfff99) drop-shadow(0 9px 5px #000d)!important}
+#chessboard .piece-knight{filter:drop-shadow(0 0 9px #78baffaa) drop-shadow(0 9px 5px #000d)!important}
+#chessboard .piece-pawn{filter:drop-shadow(0 2px 1px #e4f5ff66) drop-shadow(0 8px 5px #000d)!important}
+/* Damas: fichas con canto pulido, volumen y sombra de contacto. */
+.draught-piece{
+  transform:translateY(-1px) translateZ(5px);
+  transform-style:preserve-3d;
+  border-width:3px!important;
+  box-shadow:inset 0 3px 5px #fff9,inset 0 8px 10px #ffffff20,
+    inset 0 -8px 11px #000b,0 3px 0 #080d17aa,0 8px 10px #000c,
+    0 0 12px #69bfff33!important;
+  transition:transform .22s ease,box-shadow .22s ease,filter .22s ease;
+}
+.draught-piece.red{
+  border-color:#c5edff!important;
+  box-shadow:inset 0 3px 5px #fff,inset 0 8px 10px #ffffff25,
+    inset 0 -9px 12px #092746aa,0 3px 0 #09233e,0 8px 10px #000c,
+    0 0 13px #63bfff55!important;
+}
+.draught-piece.black{
+  border-color:#a9d7f5!important;
+  box-shadow:inset 0 3px 5px #fff,inset 0 8px 10px #ffffff20,
+    inset 0 -9px 12px #071525cc,0 3px 0 #07111f,0 8px 10px #000c,
+    0 0 11px #9bcfff44!important;
+}
+.square.selected .draught-piece{
+  transform:translateY(-5px) translateZ(10px) scale(1.1)!important;
+  filter:brightness(1.12) drop-shadow(0 10px 6px #000c);
+}
+.draught-piece.king:after{
+  text-shadow:0 1px 0 #fff0c2,0 3px 0 #d2a84c,0 5px 6px #000d,
+    0 0 10px #ffe7a0cc!important;
+}
+@media(prefers-reduced-motion:reduce){
+  #chessboard .piece,.draught-piece{transition:none!important;will-change:auto}
+}
+:root.reduced-motion #chessboard .piece,:root.reduced-motion .draught-piece{
+  transition:none!important;will-change:auto
+}
+
+
+/* ===== FANTASY GAMES 8.4 · ARSENAL DE LOS REINOS / ETAPA 2 ===== */
+.arsenal-intro{max-width:760px;margin:-10px auto 18px;text-align:center;color:#d7d0c5;font:14px/1.7 Marcellus,serif}
+.arsenal-stage-note{width:max-content;max-width:100%;margin:0 auto 20px;padding:8px 15px;border:1px solid #8abfe977;border-radius:30px;color:#dceeff;font:11px Cinzel,serif;letter-spacing:1.5px;background:linear-gradient(100deg,#14283d,#171522)}
+.arsenal-stage-note span{color:#ffe7a0;font-weight:800}
+.arsenal-tabs{max-width:900px;margin:0 auto 18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.arsenal-tab{min-height:48px;border:1px solid #8abfe977;border-radius:7px;background:linear-gradient(145deg,#25364c,#111a2a);color:#dceeff;font:700 11px Cinzel,serif;letter-spacing:1px;cursor:pointer;transition:.2s}
+.arsenal-tab:hover,.arsenal-tab.active{border-color:#ffe7a0;color:#fff0bd;box-shadow:0 0 18px #75caff30,inset 0 0 14px #75caff12;transform:translateY(-1px)}
+.arsenal-feature-panel{max-width:900px;margin:0 auto 16px;display:flex;align-items:center;gap:15px}
+.arsenal-feature-mark{width:48px;height:48px;flex:none;display:grid;place-items:center;border:1px solid #a9d8f0;border-radius:50%;color:#e6f6ff;font-size:25px;background:radial-gradient(circle,#416b8c,#15263b 70%);box-shadow:0 0 20px #70caff35}
+.arsenal-feature-panel h3{margin:0 0 6px;color:#ffe7a0;font:700 15px Cinzel,serif;letter-spacing:1.5px}
+.arsenal-feature-panel p{margin:0;color:#c7cbd4;font-size:12px;line-height:1.6}
+.arsenal-collection-grid{max-width:1050px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.arsenal-card{position:relative;overflow:hidden;min-height:210px;padding:17px;border:1px solid #a66d3d88;border-radius:10px;background:linear-gradient(145deg,#28191b 0%,#120d10 72%,#241316 100%);box-shadow:0 12px 30px #0009,inset 0 1px #ffdb8b18}
+.arsenal-card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,#dceeff,#d7b46a,transparent);opacity:.8}
+.arsenal-card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.arsenal-card-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:8px;border:1px solid #b7cfe477;background:radial-gradient(circle at 30% 20%,#526b83,#111a28 75%);font-size:22px;color:#f7e8c5}
+.arsenal-card-state{padding:5px 8px;border:1px solid #b99a5a55;border-radius:20px;color:#d5c6a7;font-size:9px;letter-spacing:.7px}
+.arsenal-card h3{margin:0 0 7px;color:#ffe7a0;font:700 14px Cinzel,serif}
+.arsenal-card p{min-height:38px;margin:0;color:#c5bdb4;font-size:11px;line-height:1.6}
+.arsenal-swatch{height:7px;margin-top:15px;border-radius:10px;background:var(--swatch,linear-gradient(90deg,#dceeff,#4e91c1,#15263b));box-shadow:0 0 12px #75caff25}
+.arsenal-footnote{max-width:900px;margin:18px auto 0;text-align:center;color:#a9a9b8;font-size:10px;line-height:1.7}
+
+.arsenal-progress{max-width:900px;margin:0 auto 18px;padding:17px 20px;border:1px solid #8abfe977;background:linear-gradient(135deg,#172b40ee,#111722ee);box-shadow:0 10px 26px #0008,inset 0 1px #ffffff12}
+.arsenal-progress-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.arsenal-eyebrow{font:10px Cinzel,serif;letter-spacing:2px;color:#9bc8e7}
+.arsenal-progress-head h3{margin:4px 0 0;color:#ffe7a0;font:700 20px Cinzel,serif}
+.arsenal-wallet{display:flex;gap:18px;flex-wrap:wrap;color:#dceeff;font:700 12px Cinzel,serif}
+.arsenal-wallet b{color:#fff0bd;font-size:15px}
+.arsenal-xp-track{height:10px;margin-top:14px;overflow:hidden;border:1px solid #a8d9ff55;border-radius:20px;background:#080e18}
+.arsenal-xp-track>div{height:100%;width:0;background:linear-gradient(90deg,#4b91c2,#b9eaff,#f6d98c);box-shadow:0 0 12px #75caff88;transition:width .3s}
+#arsenal-next-level{margin:5px 0 0;color:#aebdca;font-size:10px}
+.arsenal-progress-stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;color:#cbd6df;font-size:11px}
+.arsenal-progress-stats b{color:#ffe7a0}
+.arsenal-card{min-height:250px;display:flex;flex-direction:column}
+.arsenal-card.is-locked{filter:saturate(.72)}
+.arsenal-card.is-owned{border-color:#83c7a588;background:linear-gradient(145deg,#172d2b,#101820 75%,#14251f)}
+.arsenal-card-action{width:100%;margin-top:auto;padding:9px 10px;border:1px solid #8abfe977;border-radius:6px;background:linear-gradient(145deg,#294765,#14243a);color:#e9f6ff;font:700 10px Cinzel,serif;letter-spacing:.7px;cursor:pointer}
+.arsenal-card-action:hover:not(:disabled){border-color:#ffe7a0;box-shadow:0 0 14px #75caff33}
+.arsenal-card-action:disabled{opacity:.55;cursor:not-allowed}
+.arsenal-card-state.owned{color:#a9edc5;border-color:#78c99b88}
+.arsenal-card-state.locked{color:#ffe0a0}
+@media(max-width:760px){.arsenal-collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.arsenal-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.arsenal-collection-grid{grid-template-columns:1fr}.arsenal-card{min-height:0}.arsenal-feature-panel{align-items:flex-start}}
+
+
+
+/* FANTASY GAMES 8.5 — coordenadas discretas y tableros equipables */
+.version-tag{display:inline-block;margin-left:3px;font:500 8px/1 Montserrat,sans-serif;letter-spacing:.35px;color:#9daec0;opacity:.62;vertical-align:super}
+.coordinate-frame{width:min(100%,704px);margin:8px auto 10px;display:grid;grid-template-columns:clamp(15px,2.5vw,20px) minmax(0,1fr);grid-template-rows:auto clamp(15px,2.5vw,20px);gap:2px;align-items:stretch}
+.coordinate-frame #chessboard,.coordinate-frame #chinese-board{grid-column:2;grid-row:1;width:100%;max-width:none;margin:0;min-width:0;min-height:0}
+.coordinate-ranks{grid-column:1;grid-row:1;display:grid;grid-template-rows:repeat(8,minmax(0,1fr));align-items:center;justify-items:center;color:#b9cce0;font:600 9px/1 Montserrat,sans-serif;text-shadow:0 1px 3px #000;opacity:.84}
+.coordinate-files{grid-column:2;grid-row:2;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));align-items:center;justify-items:center;color:#b9cce0;font:600 9px/1 Montserrat,sans-serif;text-shadow:0 1px 3px #000;opacity:.84}
+.arsenal-equipped-note{width:max-content;max-width:100%;margin:0 auto 14px;padding:6px 12px;border:1px solid #83c7a555;border-radius:20px;background:#10251e99;color:#b7e8ce;font:600 9px Cinzel,serif;letter-spacing:1px;text-align:center}
+
+/* Reino Real mantiene el aspecto clásico de Fantasy Games. */
+:root[data-board-skin="ice"] #chessboard,:root[data-board-skin="ice"] #chinese-board{border:4px solid #9edff5!important;box-shadow:0 0 0 1px #effcff,0 0 27px #62d6ff66,0 20px 52px #000c!important}
+:root[data-board-skin="ice"] #chessboard .square.light,:root[data-board-skin="ice"] #chinese-board .square.light{background:linear-gradient(145deg,#ffffff 0%,#d8f3ff 55%,#9acfe9 100%)!important;box-shadow:inset 1px 1px #fff,inset -3px -3px 7px #397fa455!important}
+:root[data-board-skin="ice"] #chessboard .square.dark,:root[data-board-skin="ice"] #chinese-board .square.dark{background:linear-gradient(145deg,#6aabc9 0%,#285c83 60%,#123653 100%)!important;box-shadow:inset 1px 1px #e5faff55,inset -3px -3px 7px #061c31!important}
+:root[data-board-skin="forest"] #chessboard,:root[data-board-skin="forest"] #chinese-board{border:4px solid #83b77b!important;box-shadow:0 0 0 1px #e0f2bf88,0 0 25px #4aaa6b55,0 20px 52px #000c!important}
+:root[data-board-skin="forest"] #chessboard .square.light,:root[data-board-skin="forest"] #chinese-board .square.light{background:linear-gradient(145deg,#e6efc9 0%,#b6c995 54%,#7d966a 100%)!important;box-shadow:inset 1px 1px #fff9,inset -3px -3px 7px #344b2b77!important}
+:root[data-board-skin="forest"] #chessboard .square.dark,:root[data-board-skin="forest"] #chinese-board .square.dark{background:linear-gradient(145deg,#557c59 0%,#28533c 58%,#143326 100%)!important;box-shadow:inset 1px 1px #dfffc333,inset -3px -3px 7px #071c12!important}
+:root[data-board-skin="obsidian"] #chessboard,:root[data-board-skin="obsidian"] #chinese-board{border:4px solid #d1a95e!important;box-shadow:0 0 0 1px #ffe8a055,0 0 28px #d69b3d55,0 20px 52px #000c!important}
+:root[data-board-skin="obsidian"] #chessboard .square.light,:root[data-board-skin="obsidian"] #chinese-board .square.light{background:linear-gradient(145deg,#88765c 0%,#514331 58%,#30251e 100%)!important;box-shadow:inset 1px 1px #fff6,inset -3px -3px 7px #100b08aa!important}
+:root[data-board-skin="obsidian"] #chessboard .square.dark,:root[data-board-skin="obsidian"] #chinese-board .square.dark{background:linear-gradient(145deg,#40353a 0%,#201a22 58%,#0d0b11 100%)!important;box-shadow:inset 1px 1px #f6dca022,inset -3px -3px 7px #000!important}
+:root[data-board-skin="arcane"] #chessboard,:root[data-board-skin="arcane"] #chinese-board{border:4px solid #a88bdd!important;box-shadow:0 0 0 1px #e7dcff88,0 0 28px #956be977,0 20px 52px #000c!important}
+:root[data-board-skin="arcane"] #chessboard .square.light,:root[data-board-skin="arcane"] #chinese-board .square.light{background:linear-gradient(145deg,#eee5ff 0%,#c5b2e8 54%,#8a78b7 100%)!important;box-shadow:inset 1px 1px #fff,inset -3px -3px 7px #33244f66!important}
+:root[data-board-skin="arcane"] #chessboard .square.dark,:root[data-board-skin="arcane"] #chinese-board .square.dark{background:linear-gradient(145deg,#564778 0%,#302347 58%,#171128 100%)!important;box-shadow:inset 1px 1px #f4eaff33,inset -3px -3px 7px #080511!important}
+@media(max-width:560px){.coordinate-frame{grid-template-columns:14px minmax(0,1fr);grid-template-rows:auto 14px;gap:1px}.coordinate-ranks,.coordinate-files{font-size:8px}.version-tag{font-size:7px}}
+
+
+
+/* ===== FANTASY GAMES 8.7 · PIEZAS 3D, TEMAS GLOBALES Y SANTUARIO PRIVADO ===== */
+#chessboard,#chinese-board{position:relative;isolation:isolate}
+.fg-3d-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block;z-index:9;pointer-events:none!important}
+html.fg-webgl-3d-ready #chessboard .piece,
+html.fg-webgl-3d-ready #chinese-board .draught-piece{opacity:0!important;visibility:hidden!important}
+#chessboard .piece,#chinese-board .draught-piece{transition:filter .2s ease,transform .2s ease}
+.dedication-lock{position:relative;width:min(100%,620px);margin:28px auto;padding:clamp(24px,5vw,42px);text-align:center;border:1px solid #d7b46a99;border-radius:14px;background:radial-gradient(ellipse at 50% 0%,#2d4d6b88,transparent 55%),linear-gradient(145deg,#17253bfa,#0c1424fa 65%,#191323fa);box-shadow:0 28px 90px #000d,0 0 44px #8dcfff22,inset 0 0 0 5px #d7b46a0c}
+.dedication-lock h2{margin:12px 0;color:#ffe8ad;font:700 clamp(20px,4vw,28px) Cinzel,serif;letter-spacing:1px;text-shadow:0 0 20px #9bdcff66}
+.dedication-lock-copy{max-width:460px;margin:0 auto 22px;color:#c8d8e9;font:14px/1.8 Marcellus,serif}
+#dedication-auth-form{max-width:390px;margin:auto;display:grid;gap:10px;text-align:left}
+#dedication-auth-form label{color:#d7eaff;font:700 10px Cinzel,serif;letter-spacing:1.3px}
+#dedication-password{width:100%;min-height:46px;padding:12px 14px;border:1px solid #8ebce088;border-radius:7px;background:#080f1dcc;color:#f2f7ff;font:14px Montserrat,sans-serif;outline:none}
+#dedication-password:focus{border-color:#d9bd78;box-shadow:0 0 0 3px #8dcfff22}
+.dedication-status{min-height:24px;margin:16px auto 0;color:#c8d9e9;font:12px/1.6 Montserrat,sans-serif}
+.dedication-security-note{max-width:440px;margin:8px auto 0;color:#8799ad;font:10px/1.6 Montserrat,sans-serif}
+#dedication-content[hidden]{display:none!important}
+#dedication-content{position:relative;margin:28px auto;padding:30px;text-align:center}
+#dedication-content h2{color:#ffe8ad}
+#dedication-content .book-signature{margin-top:15px;color:#fff0c9}
+#dedication-content .book-message{margin:18px auto;color:#e5d6c7;line-height:1.8}
+
+/* Tema completo: las variables alcanzan fondos, paneles, controles, modales y Arsenal. */
+html[data-fg-ui-theme="ice"] body{background:radial-gradient(ellipse at 50% -8%,#315b7c 0%,transparent 43%),linear-gradient(135deg,#050c17,#101f32 52%,#07111e)!important;color:#eaf7ff!important}
+html[data-fg-ui-theme="ice"] .panel,html[data-fg-ui-theme="ice"] .modal,html[data-fg-ui-theme="ice"] .dedication-lock{background:linear-gradient(145deg,#203e59f5,#0d1c2df5 74%)!important;border-color:#92d8f0aa!important}
+html[data-fg-ui-theme="ice"] .fantasy-btn,html[data-fg-ui-theme="ice"] .arsenal-tab,html[data-fg-ui-theme="ice"] .arsenal-card-action{background:linear-gradient(145deg,#35688c,#142c46)!important;border-color:#8edcf4!important;color:#f0fbff!important}
+html[data-fg-ui-theme="ice"] .screen-heading,html[data-fg-ui-theme="ice"] .panel-title{color:#d9f4ff!important}
+html[data-fg-ui-theme="emerald"] body{background:radial-gradient(ellipse at 50% -8%,#26543f 0%,transparent 43%),linear-gradient(135deg,#050f0c,#10271e 52%,#07130f)!important;color:#edfff4!important}
+html[data-fg-ui-theme="emerald"] .panel,html[data-fg-ui-theme="emerald"] .modal,html[data-fg-ui-theme="emerald"] .dedication-lock{background:linear-gradient(145deg,#1c3b2ff5,#0b1b15f5 74%)!important;border-color:#8bc79a99!important}
+html[data-fg-ui-theme="emerald"] .fantasy-btn,html[data-fg-ui-theme="emerald"] .arsenal-tab,html[data-fg-ui-theme="emerald"] .arsenal-card-action{background:linear-gradient(145deg,#326c4e,#143b2b)!important;border-color:#9bd8a9!important;color:#f0fff3!important}
+html[data-fg-ui-theme="emerald"] .screen-heading,html[data-fg-ui-theme="emerald"] .panel-title{color:#d5f4d9!important}
+html[data-fg-ui-theme="eclipse"] body{background:radial-gradient(ellipse at 50% -8%,#49316d 0%,transparent 43%),linear-gradient(135deg,#080611,#181126 52%,#090713)!important;color:#f5edff!important}
+html[data-fg-ui-theme="eclipse"] .panel,html[data-fg-ui-theme="eclipse"] .modal,html[data-fg-ui-theme="eclipse"] .dedication-lock{background:linear-gradient(145deg,#302044f5,#120e20f5 74%)!important;border-color:#ad8cdb99!important}
+html[data-fg-ui-theme="eclipse"] .fantasy-btn,html[data-fg-ui-theme="eclipse"] .arsenal-tab,html[data-fg-ui-theme="eclipse"] .arsenal-card-action{background:linear-gradient(145deg,#62458a,#211632)!important;border-color:#b79ce6!important;color:#fff7ff!important}
+html[data-fg-ui-theme="eclipse"] .screen-heading,html[data-fg-ui-theme="eclipse"] .panel-title{color:#e4d3ff!important}
+html[data-fg-ui-theme="arena"] body{background:radial-gradient(ellipse at 50% -8%,#70502f 0%,transparent 43%),linear-gradient(135deg,#160e08,#2d1e12 52%,#120b08)!important;color:#fff2dc!important}
+html[data-fg-ui-theme="arena"] .panel,html[data-fg-ui-theme="arena"] .modal,html[data-fg-ui-theme="arena"] .dedication-lock{background:linear-gradient(145deg,#513a25f5,#21160ff5 74%)!important;border-color:#d8b06eaa!important}
+html[data-fg-ui-theme="arena"] .fantasy-btn,html[data-fg-ui-theme="arena"] .arsenal-tab,html[data-fg-ui-theme="arena"] .arsenal-card-action{background:linear-gradient(145deg,#805a31,#392417)!important;border-color:#e3c17e!important;color:#fff4df!important}
+html[data-fg-ui-theme="arena"] .screen-heading,html[data-fg-ui-theme="arena"] .panel-title{color:#ffe3ae!important}
+
+/* Los efectos no interfieren con clics ni con las pistas de movimiento. */
+html[data-fg-effect="aura"] #chessboard,html[data-fg-effect="aura"] #chinese-board{filter:drop-shadow(0 0 12px #72caff55)}
+html[data-fg-effect="runes"] #chessboard,html[data-fg-effect="runes"] #chinese-board{outline:1px solid #a88bd866;outline-offset:3px}
+html[data-fg-effect="stardust"] #chessboard,html[data-fg-effect="stardust"] #chinese-board{filter:drop-shadow(0 0 10px #e5d7ff55)}
+html[data-fg-effect="void"] #chessboard,html[data-fg-effect="void"] #chinese-board{filter:drop-shadow(0 0 13px #6f4dbb77)}
+html[data-fg-effect="celestial"] #chessboard,html[data-fg-effect="celestial"] #chinese-board{filter:drop-shadow(0 0 13px #d6efff88)}
+@media(max-width:560px){.dedication-lock{margin:12px auto;padding:22px 16px}.dedication-lock h2{font-size:20px}}
+
+</style>
+</head>
+
+<body>
+<div id="particles"></div>
+<div id="app">
+
+<!-- ================= MENÚ PRINCIPAL ================= -->
+<section id="screen-menu" class="screen active">
+  <div class="brand">
+    <div class="brand-kicker">Crónicas de los antiguos reinos</div>
+    <h1>FANTASY GAMES <small class="version-tag">v8.7</small> <span>LA GUERRA DE LOS REINOS</span></h1>
+    <div class="gold-line"></div>
+    <div class="brand-subtitle">EL DESTINO SE DECIDE EN CADA MOVIMIENTO</div>
+  </div>
+
+  <div class="menu-wrap">
+    <div class="menu-grid">
+      <button class="fantasy-btn primary" id="btn-local">♟ JUGAR PARTIDA</button>
+      <button class="fantasy-btn" id="btn-chinese">♛ DAMAS CLÁSICAS</button>
+      <button class="fantasy-btn" id="btn-bot">⚔ JUGAR CONTRA BOT</button>
+      <button class="fantasy-btn" id="btn-online">✦ MULTIJUGADOR ONLINE</button>
+      <button class="fantasy-btn" id="btn-settings">⚙ CONFIGURACIÓN</button>
+      <button class="fantasy-btn primary" id="btn-arsenal">⚔ ARSENAL DE LOS REINOS</button>
+      <button class="fantasy-btn" id="btn-hall">♛ SALÓN DE LA FAMA</button>
+      <button class="fantasy-btn" id="btn-dedication">✧ DEDICATORIA</button>
+    </div>
+    <p class="menu-note">DOS REINOS · AJEDREZ Y DAMAS · UN DESTINO</p>
+  </div>
+  <footer>FANTASY GAMES <small class="version-tag">v8.7</small> · LA GUERRA DE LOS REINOS</footer>
+</section>
+
+<!-- ================= PARTIDA ================= -->
+<section id="screen-game" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div>
+    <button class="fantasy-btn small" id="btn-game-menu">✕ MENÚ</button>
+  </div>
+
+  <h2 class="screen-heading" id="game-heading">LA BATALLA COMIENZA</h2>
+
+  <div class="game-layout">
+    <div class="panel board-panel">
+      <div class="board-top">
+        <div class="turn-label" id="turn-label">Turno de las blancas</div>
+        <div id="check-status"></div>
+      </div>
+      <div class="coordinate-frame" aria-label="Coordenadas del tablero de ajedrez">
+        <div class="coordinate-ranks" aria-hidden="true"><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
+        <div id="chessboard" class="chessboard" aria-label="Tablero de ajedrez"></div>
+        <div class="coordinate-files" aria-hidden="true"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
+      </div>
+    </div>
+
+    <aside class="game-side">
+      <div class="player-card" id="white-card">
+        <div class="avatar" id="white-avatar">♔</div>
+        <div><div class="player-name" id="white-name">Reino de la Luz</div><div class="player-meta">EJÉRCITO BLANCO</div></div>
+      </div>
+      <div class="player-card" id="black-card">
+        <div class="avatar" id="black-avatar">♚</div>
+        <div><div class="player-name" id="black-name">Reino de las Sombras</div><div class="player-meta">EJÉRCITO NEGRO</div></div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">PIEZAS CAPTURADAS</h3>
+        <div class="muted" style="font-size:10px">Blancas:</div>
+        <div class="captured-row" id="captured-white"></div>
+        <div class="muted" style="font-size:10px;margin-top:8px">Negras:</div>
+        <div class="captured-row" id="captured-black"></div>
+      </div>
+
+      <div class="panel history-panel">
+        <h3 class="panel-title">CRÓNICA DE LA BATALLA</h3>
+        <div class="history" id="move-history"><div class="muted">Los movimientos aparecerán aquí.</div></div>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">COMANDOS</h3>
+        <div class="game-controls">
+          <button class="fantasy-btn small" id="btn-undo">↶ DESHACER</button>
+          <button class="fantasy-btn small" id="btn-pause">Ⅱ PAUSAR</button>
+          <button class="fantasy-btn small" id="btn-restart">⟳ REINICIAR</button>
+          <button class="fantasy-btn small danger" id="btn-resign">⚑ RENDIRSE</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= CONFIGURACIÓN ================= -->
+<section id="screen-settings" class="screen">
+  <div class="topbar"><div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div><button class="fantasy-btn small" data-screen="menu">← VOLVER</button></div>
+  <h2 class="screen-heading">ARSENAL Y CONFIGURACIÓN DE LOS REINOS</h2>
+  <div class="settings-grid">
+    <div class="panel"><h3 class="panel-title">IDENTIDAD DE LOS JUGADORES</h3>
+      <div class="field"><label for="setting-white-name">JUGADOR BLANCO</label><input id="setting-white-name" maxlength="22" value="Reino de la Luz"></div>
+      <div class="field"><label for="setting-black-name">JUGADOR NEGRO</label><input id="setting-black-name" maxlength="22" value="Reino de las Sombras"></div>
+      <div class="field"><label for="setting-white-avatar">AVATAR BLANCO</label><select id="setting-white-avatar"><option>♔</option><option>🛡️</option><option>🦁</option><option>🧙</option><option>🐺</option></select></div>
+      <div class="field"><label for="setting-black-avatar">AVATAR NEGRO</label><select id="setting-black-avatar"><option>♚</option><option>🐉</option><option>👑</option><option>🦇</option><option>⚔️</option></select></div>
+    </div>
+    <div class="panel"><h3 class="panel-title">APARIENCIA, TABLERO Y SONIDO</h3>
+      <div class="field"><label for="setting-theme">TEMA DEL TABLERO</label><select id="setting-theme"><option value="royal">Reino Real</option><option value="forest">Bosque Antiguo</option><option value="ice">Reino de Hielo</option><option value="obsidian">Ónice y Obsidiana</option></select></div>
+      <div class="setting-row"><span>Sonidos del juego</span><input type="checkbox" id="setting-sound" checked></div>
+      <div class="setting-row"><span>Animaciones</span><input type="checkbox" id="setting-animations" checked></div>
+      <div class="setting-row"><span>Partículas mágicas</span><input type="checkbox" id="setting-particles" checked></div>
+      <div class="setting-row"><span>Mostrar destinos legales</span><input type="checkbox" id="setting-hints" checked></div>
+      <div class="setting-row"><span>Animaciones reducidas</span><input type="checkbox" id="setting-reduced-motion"></div>
+    </div>
+    <div class="panel"><h3 class="panel-title">♛ FORJA DE PIEZAS DE AJEDREZ</h3><p class="settings-note">Personaliza el acabado de los dos ejércitos.</p>
+      <div class="field"><label for="setting-chess-palette">ESTILO DE PIEZAS</label><select id="setting-chess-palette"><option value="silver">Plata y azul mágico / oro y obsidiana</option><option value="ivory">Marfil real / acero antiguo</option><option value="emerald">Esmeralda encantada / oro oscuro</option></select></div>
+      <div class="field"><label for="setting-chess-white">ACABADO DEL REINO CLARO</label><select id="setting-chess-white"><option value="silver">Plata pulida</option><option value="ivory">Marfil brillante</option><option value="emerald">Jade esmeralda</option></select></div>
+      <div class="field"><label for="setting-chess-black">ACABADO DEL REINO OSCURO</label><select id="setting-chess-black"><option value="gold">Oro y obsidiana</option><option value="steel">Acero oscuro</option><option value="blue">Azul abisal</option></select></div>
+    </div>
+    <div class="panel"><h3 class="panel-title">✦ FORJA DE FICHAS DE DAMAS</h3><p class="settings-note">Elige la paleta y la forma de tus fichas y coronas.</p>
+      <div class="field"><label for="setting-draught-palette">PALETA DE FICHAS</label><select id="setting-draught-palette"><option value="classic">Azul hielo y azul profundo</option><option value="royal">Oro real y plata azulada</option><option value="arcane">Violeta arcano y turquesa</option></select></div>
+      <div class="field"><label for="setting-draught-shape">FORMA DE LAS FICHAS</label><select id="setting-draught-shape"><option value="round">Disco clásico</option><option value="gem">Gema tallada</option><option value="rune">Sello rúnico</option></select></div>
+    </div>
+    <div class="panel"><h3 class="panel-title">⚔ EXPERIENCIA DE BATALLA</h3>
+      <div class="field"><label for="setting-volume">VOLUMEN GENERAL</label><input id="setting-volume" type="range" min="0" max="100" step="5" value="70"></div>
+      <div class="field"><label for="setting-quality">CALIDAD DE EFECTOS</label><select id="setting-quality"><option value="high">Alta — todos los efectos</option><option value="balanced">Equilibrada</option><option value="low">Ligera — mejor rendimiento</option></select></div>
+      <div class="settings-actions"><button class="fantasy-btn primary wide" id="btn-save-settings">GUARDAR TODA LA CONFIGURACIÓN</button><button class="fantasy-btn wide" id="btn-reset-settings">RESTABLECER</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SALÓN DE LA FAMA ================= -->
+<section id="screen-hall" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div>
+    <button class="fantasy-btn small" data-screen="menu">← VOLVER</button>
+  </div>
+  <h2 class="screen-heading">SALÓN DE LA FAMA</h2>
+  <div class="panel" style="max-width:850px;margin:auto">
+    <div class="metrics">
+      <div class="metric"><strong id="stat-games">0</strong><span>PARTIDAS</span></div>
+      <div class="metric"><strong id="stat-wins">0</strong><span>VICTORIAS</span></div>
+      <div class="metric"><strong id="stat-losses">0</strong><span>DERROTAS</span></div>
+      <div class="metric"><strong id="stat-draws">0</strong><span>TABLAS</span></div>
+    </div>
+    <p class="muted" style="font-size:12px;text-align:center">Las estadísticas se guardan en este dispositivo.</p>
+    <button class="fantasy-btn danger small" id="btn-reset-stats">REINICIAR ESTADÍSTICAS</button>
+  </div>
+</section>
+
+<!-- ================= MULTIJUGADOR ONLINE · CONEXIÓN REAL ================= -->
+<section id="screen-online" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div>
+    <button class="fantasy-btn small" data-screen="menu">← VOLVER</button>
+  </div>
+  <h2 class="screen-heading">PORTAL ENTRE REINOS</h2>
+  <div class="panel" style="max-width:800px;margin:0 auto 18px">
+    <h3 class="panel-title">CONEXIÓN DEL SERVIDOR</h3>
+    <p class="muted" style="font-size:12px;line-height:1.8">Pega aquí la dirección HTTPS que te dará Render. Ambos jugadores deben usar la misma dirección.</p>
+    <div class="field"><label for="server-url">DIRECCIÓN DEL SERVIDOR</label><input id="server-url" inputmode="url" autocomplete="url" placeholder="https://tu-servidor.onrender.com"></div>
+    <button class="fantasy-btn primary wide" id="btn-connect-server">CONECTAR CON EL REINO</button>
+    <div id="online-status" class="muted" role="status" aria-live="polite" style="font-size:11px;margin-top:10px">Servidor no conectado.</div>
+  </div>
+  <div class="online-grid">
+    <div class="panel">
+      <h3 class="panel-title">CREAR UNA SALA</h3>
+      <div class="field"><label for="online-game-type">TIPO DE PARTIDA</label><select id="online-game-type"><option value="chess">Ajedrez</option><option value="checkers">Damas clásicas</option></select></div>
+      <p class="muted" style="font-size:12px;line-height:1.7">Crea una sala real y comparte el código de seis caracteres con tu rival.</p>
+      <button class="fantasy-btn primary wide" id="btn-create-room">CREAR SALA ONLINE</button>
+      <div class="room-code" id="room-code">------</div>
+      <button class="fantasy-btn small wide" id="btn-copy-room">COPIAR CÓDIGO</button>
+    </div>
+    <div class="panel">
+      <h3 class="panel-title">UNIRSE A UNA SALA</h3>
+      <div class="field"><label for="join-room-code">CÓDIGO DE PARTIDA</label><input id="join-room-code" maxlength="6" autocapitalize="characters" autocomplete="off" placeholder="EJ. 7KQ9MP"></div>
+      <button class="fantasy-btn wide" id="btn-join-room">UNIRSE A LA BATALLA</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEDICATORIA ================= -->
+
+<!-- ================= ARSENAL DE LOS REINOS · ETAPA 1 ================= -->
+<section id="screen-arsenal" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div>
+    <button class="fantasy-btn small" data-screen="menu">← VOLVER</button>
+  </div>
+  <h2 class="screen-heading">ARSENAL DE LOS REINOS</h2>
+  <p class="arsenal-intro">Desbloquea y equipa tableros, colecciones de piezas 3D, efectos mágicos y temas completos. Tus elecciones se aplican a las partidas y se guardan en este dispositivo.</p>
+  <div class="arsenal-stage-note"><span>ETAPA 3</span> · TABLEROS PERSONALIZABLES</div>
+  <section class="arsenal-progress panel" aria-label="Progreso del reino">
+    <div class="arsenal-progress-head"><div><span class="arsenal-eyebrow">TU LEYENDA</span><h3 id="arsenal-level">NIVEL 1</h3></div><div class="arsenal-wallet"><span>✦ <b id="arsenal-xp">0</b> XP</span><span>◈ <b id="arsenal-coins">150</b> MONEDAS</span></div></div>
+    <div class="arsenal-xp-track"><div id="arsenal-xp-fill"></div></div>
+    <p id="arsenal-next-level">0 / 250 XP para el siguiente nivel</p>
+    <div class="arsenal-progress-stats"><span>⚔ Batallas: <b id="arsenal-games">0</b></span><span>♛ Victorias: <b id="arsenal-wins">0</b></span><span>🔓 Desbloqueos: <b id="arsenal-unlocks">3</b></span></div>
+  </section>
+  <div class="arsenal-tabs" role="tablist" aria-label="Categorías del Arsenal">
+    <button class="arsenal-tab active" type="button" data-arsenal-cat="boards" role="tab" aria-selected="true">♜ TABLEROS</button>
+    <button class="arsenal-tab" type="button" data-arsenal-cat="pieces" role="tab" aria-selected="false">♟ PIEZAS</button>
+    <button class="arsenal-tab" type="button" data-arsenal-cat="effects" role="tab" aria-selected="false">✧ EFECTOS</button>
+    <button class="arsenal-tab" type="button" data-arsenal-cat="themes" role="tab" aria-selected="false">❖ TEMAS</button>
+  </div>
+  <p class="arsenal-equipped-note" id="arsenal-equipped-board">TABLERO ACTIVO: REINO REAL</p>
+  <div class="panel arsenal-feature-panel">
+    <div class="arsenal-feature-mark">✦</div>
+    <div>
+      <h3 id="arsenal-category-title">FORJA DE TABLEROS</h3>
+      <p id="arsenal-category-description">Campos de batalla forjados por los antiguos reinos. Cada colección tendrá una identidad visual propia.</p>
+    </div>
+  </div>
+  <div id="arsenal-collection-grid" class="arsenal-collection-grid" aria-live="polite"></div>
+  <p class="arsenal-footnote">Gana XP y monedas al terminar partidas. Los tableros desbloqueados se pueden equipar y se aplican a ajedrez y Damas. Tu selección queda guardada en este dispositivo.</p>
+</section>
+
+<section id="screen-dedication" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div>
+    <button class="fantasy-btn small" data-screen="menu">← VOLVER</button>
+  </div>
+  <div class="dedication-wrap">
+    <article class="dedication-lock" id="dedication-lock-panel">
+      <div class="book-ornament">✧ 🔒 ✧</div>
+      <div class="brand-kicker">Santuario privado de los reinos</div>
+      <h2>DEDICATORIA PROTEGIDA</h2>
+      <p class="dedication-lock-copy">Este recuerdo está reservado. Para abrirlo, el servidor deberá validar tu clave privada.</p>
+      <form id="dedication-auth-form" autocomplete="off">
+        <label for="dedication-password">CLAVE DE ACCESO</label>
+        <input id="dedication-password" name="password" type="password" required autocomplete="new-password" spellcheck="false" maxlength="256" placeholder="Introduce la clave privada">
+        <button class="fantasy-btn primary wide" id="dedication-unlock-button" type="submit">🔐 SOLICITAR ACCESO</button>
+      </form>
+      <p class="dedication-status" id="dedication-status" role="status" aria-live="polite">Santuario cerrado. La validación se habilitará al conectar el servidor privado.</p>
+      <p class="dedication-security-note">La clave y el contenido privado no se guardan en este archivo ni en el almacenamiento del navegador.</p>
+    </article>
+    <article class="book" id="dedication-content" hidden aria-live="polite"></article>
+  </div>
+</section>
+
+
+<!-- ================= DAMAS CLÁSICAS ================= -->
+<section id="screen-chinese" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">♛ FANTASY GAMES <small class="version-tag">v8.7</small></div>
+    <button class="fantasy-btn small" id="btn-chinese-menu">✕ MENÚ</button>
+  </div>
+  <h2 class="screen-heading">DAMAS CLÁSICAS · EL DUELO DE LOS REINOS</h2>
+  <div class="draughts-layout">
+    <div class="panel board-panel">
+      <div class="board-top">
+        <div class="turn-label" id="cc-turn">Prepara tu partida</div>
+        <div class="muted" id="cc-status">Capturas obligatorias · Corona tus fichas.</div>
+      </div>
+      <div class="coordinate-frame checkers-coordinate-frame" aria-label="Coordenadas del tablero de damas clásicas">
+        <div class="coordinate-ranks" aria-hidden="true"><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span></div>
+        <div id="chinese-board" class="checkers-board" aria-label="Tablero de damas clásicas de 8 por 8"></div>
+        <div class="coordinate-files" aria-hidden="true"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span></div>
+      </div>
+      <div class="checkers-controls">
+        <button class="fantasy-btn small" id="cc-new-game">NUEVA PARTIDA</button>
+        <button class="fantasy-btn small danger" id="cc-resign">ABANDONAR</button>
+      </div>
+      <p class="menu-note">Selecciona una ficha iluminada y después la casilla de destino.</p>
+    </div>
+    <aside class="game-side">
+      <div class="panel">
+        <h3 class="panel-title">EJÉRCITOS</h3>
+        <div id="cc-players"></div>
+      </div>
+      <div class="panel">
+        <h3 class="panel-title">REGLAS DEL DUELO</h3>
+        <ul class="checkers-rules">
+          <li>Tablero de 8×8; las fichas avanzan por casillas oscuras.</li>
+          <li>Las capturas son obligatorias.</li>
+          <li>Si puedes seguir capturando con la misma ficha, debes continuar.</li>
+          <li>Al llegar al extremo opuesto, la ficha se corona como reina.</li>
+          <li>Las reinas se mueven y capturan en diagonal hacia ambos lados.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</section>
+</div><!-- fin app -->
+
+<!-- ================= MODALES ================= -->
+
+<div class="modal-backdrop" id="modal-chinese-setup">
+  <div class="modal">
+    <h2>PREPARA EL DUELO DE DAMAS</h2>
+    <div class="field"><label for="cc-mode">MODO DE JUEGO</label>
+      <select id="cc-mode"><option value="local">Dos jugadores · Local</option><option value="bot">Contra BOT</option></select>
+    </div>
+    <div class="field"><label for="cc-side">TU EJÉRCITO (CONTRA BOT)</label>
+      <select id="cc-side"><option value="r">Azules</option><option value="b">Negras</option></select>
+    </div>
+    <div class="field"><label for="cc-level">DIFICULTAD DEL BOT</label>
+      <select id="cc-level"><option value="1">Nivel 1 · Aprendiz</option><option value="2">Nivel 2 · Caballero</option><option value="3">Nivel 3 · Estratega</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="fantasy-btn primary" id="cc-start">COMENZAR BATALLA</button>
+      <button class="fantasy-btn" data-close="modal-chinese-setup">CANCELAR</button>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop" id="modal-chinese-result">
+  <div class="modal victory-glow">
+    <h2 id="cc-result-title">¡VICTORIA!</h2>
+    <p id="cc-result-message" class="muted" style="text-align:center;line-height:1.7"></p>
+    <div class="modal-actions">
+      <button class="fantasy-btn primary" id="cc-rematch">REVANCHA</button>
+      <button class="fantasy-btn" id="cc-result-menu">MENÚ PRINCIPAL</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-bot">
+  <div class="modal">
+    <h2>ELIGE A TU OPONENTE</h2>
+    <div class="field"><label for="bot-level">DIFICULTAD</label>
+      <select id="bot-level">
+        <option value="1">Nivel 1 · Aprendiz</option>
+        <option value="2">Nivel 2 · Caballero</option>
+        <option value="3">Nivel 3 · Estratega</option>
+        <option value="4">Nivel 4 · Maestro del Reino</option>
+      </select>
+    </div>
+    <div class="field"><label for="bot-side">TU EJÉRCITO</label>
+      <select id="bot-side"><option value="w">Blancas</option><option value="b">Negras</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="fantasy-btn primary" id="btn-start-bot">COMENZAR</button>
+      <button class="fantasy-btn" data-close="modal-bot">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-promotion">
+  <div class="modal">
+    <h2>EL PEÓN HA ASCENDIDO</h2>
+    <p class="muted" style="text-align:center;font-size:12px">Elige la pieza de tu transformación.</p>
+    <div class="modal-actions" id="promotion-options">
+      <button class="fantasy-btn" data-promote="q">♛ Reina</button>
+      <button class="fantasy-btn" data-promote="r">♜ Torre</button>
+      <button class="fantasy-btn" data-promote="b">♝ Alfil</button>
+      <button class="fantasy-btn" data-promote="n">♞ Caballo</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-pause">
+  <div class="modal">
+    <h2>LA BATALLA ESTÁ EN PAUSA</h2>
+    <p class="muted" style="text-align:center;font-size:12px">Los reinos esperan tu siguiente movimiento.</p>
+    <div class="modal-actions">
+      <button class="fantasy-btn primary" id="btn-resume">CONTINUAR</button>
+      <button class="fantasy-btn" id="btn-pause-menu">VOLVER AL MENÚ</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-result">
+  <div class="modal victory-glow">
+    <h2 id="result-title">FIN DE LA BATALLA</h2>
+    <p id="result-message" class="muted" style="text-align:center;font-size:13px;line-height:1.7"></p>
+    <div class="modal-actions">
+      <button class="fantasy-btn primary" id="btn-result-rematch">REVANCHA</button>
+      <button class="fantasy-btn" id="btn-result-menu">MENÚ PRINCIPAL</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- PARTE 2: PEGA AQUÍ EL CÓDIGO JAVASCRIPT COMPLETO -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js" defer></script>
+
+<script>
+
+"use strict";
+
+/* =========================================================
+   FANTASY CHESS 5.0
+   PARTE 2/2 — MOTOR, BOT, CONTROLES Y FUNCIONES
+   ========================================================= */
+
+/* ---------- UTILIDADES Y CONFIGURACIÓN ---------- */
+
+const $ = id => document.getElementById(id);
+
+const PIECES = {
+  K:"♔", Q:"♕", R:"♖", B:"♗", N:"♘", P:"♙",
+  k:"♚", q:"♛", r:"♜", b:"♝", n:"♞", p:"♟"
+};
+
+const VALUES = {p:100,n:320,b:335,r:500,q:900,k:20000};
+
+const SETTINGS_DEFAULT = {
+  whiteName:"Reino de la Luz",
+  blackName:"Reino de las Sombras",
+  whiteAvatar:"♔",
+  blackAvatar:"♚",
+  theme:"royal",
+  sound:true,
+  animations:true,
+  particles:true,
+  hints:true,reducedMotion:false,chessPalette:"silver",chessWhite:"silver",chessBlack:"gold",
+  draughtPalette:"classic",draughtShape:"round",volume:70,quality:"high"
+};
+
+let settings = {...SETTINGS_DEFAULT};
+let game = null;
+let selectedSquare = null;
+let selectedMoves = [];
+let pendingPromotion = null;
+let botThinking = false;
+let botTimer = null;
+let lastGameMode = "local";
+let lastBotConfig = {level:1,side:"w"};
+let gamePaused = false;
+let audioContext = null;
+let toastTimer = null;
+
+const undoStack = [];
+const gameRecords = [];
+
+function safeLoad(key,fallback){
+  try{
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  }catch(e){return fallback}
+}
+function safeSave(key,value){
+  try{localStorage.setItem(key,JSON.stringify(value))}
+  catch(e){console.warn("No se pudo guardar:",e)}
+}
+function clone(value){return JSON.parse(JSON.stringify(value))}
+function opposite(color){return color==="w"?"b":"w"}
+function colorOf(piece){
+  if(!piece)return null;
+  return piece===piece.toUpperCase()?"w":"b";
+}
+function inside(r,c){return r>=0&&r<8&&c>=0&&c<8}
+function squareName(index){
+  return "abcdefgh"[index%8]+(8-Math.floor(index/8));
+}
+function indexOf(r,c){return r*8+c}
+function pieceType(piece){return piece?piece.toLowerCase():null}
+function showToast(message){
+  const el=$("toast");
+  if(!el)return;
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2600);
+}
+function showScreen(name){
+  if(name!=="dedication"&&typeof clearPrivateDedication==="function")clearPrivateDedication();
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  const target=$("screen-"+name);
+  if(target)target.classList.add("active");
+  window.scrollTo({top:0,behavior:settings.animations?"smooth":"auto"});
+}
+function openModal(id){$(id)?.classList.add("open")}
+function closeModal(id){$(id)?.classList.remove("open")}
+function closeAllModals(){
+  document.querySelectorAll(".modal-backdrop").forEach(m=>m.classList.remove("open"));
+}
+
+/* ---------- SONIDOS GENERADOS ---------- */
+
+function playSound(type="move"){
+  if(!settings.sound)return;
+  try{
+    const AudioCtx=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtx)return;
+    audioContext ||= new AudioCtx();
+    if(audioContext.state==="suspended")audioContext.resume();
+
+    const now=audioContext.currentTime;
+    const osc=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+    const tones={
+      move:[420,.075,"sine"],
+      capture:[190,.16,"triangle"],
+      check:[620,.22,"sawtooth"],
+      victory:[523,.42,"sine"],
+      error:[130,.12,"square"]
+    };
+    const [frequency,duration,wave]=tones[type]||tones.move;
+    osc.type=wave;
+    osc.frequency.setValueAtTime(frequency,now);
+    if(type==="victory"){
+      osc.frequency.setValueAtTime(659,now+.12);
+      osc.frequency.setValueAtTime(784,now+.25);
+    }
+    gain.gain.setValueAtTime(.0001,now);
+    gain.gain.exponentialRampToValueAtTime(.12*((settings.volume??70)/70),now+.015);
+    gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
+    osc.connect(gain);gain.connect(audioContext.destination);
+    osc.start(now);osc.stop(now+duration+.02);
+  }catch(e){}
+}
+
+/* ---------- PARTIDA INICIAL ---------- */
+
+function initialBoard(){
+  return [
+    ["r","n","b","q","k","b","n","r"],
+    ["p","p","p","p","p","p","p","p"],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    ["P","P","P","P","P","P","P","P"],
+    ["R","N","B","Q","K","B","N","R"]
+  ].flat();
+}
+
+function createGame(mode="local",botConfig=null){
+  clearTimeout(botTimer);
+  botThinking=false;
+  gamePaused=false;
+  selectedSquare=null;
+  selectedMoves=[];
+  pendingPromotion=null;
+  undoStack.length=0;
+  closeAllModals();
+
+  const board=initialBoard();
+  game={
+    board,
+    turn:"w",
+    castling:{K:true,Q:true,k:true,q:true},
+    enPassant:null,
+    halfmove:0,
+    fullmove:1,
+    history:[],
+    captured:{w:[],b:[]},
+    repetition:{},
+    lastMove:null,
+    mode,
+    bot:botConfig?{...botConfig}:null,
+    over:false,
+    result:null,
+    startedAt:Date.now()
+  };
+  registerPosition(game);
+  lastGameMode=mode;
+  if(botConfig)lastBotConfig={...botConfig};
+  updatePlayerLabels();
+  renderGame();
+  showScreen("game");
+
+  // El BOT debe iniciar cuando su color sea el del turno actual (incluidas blancas).
+  if(mode==="bot"&&botConfig&&game.turn===opposite(botConfig.side)){
+    scheduleBotMove();
+  }
+}
+
+function snapshotGame(){
+  return clone(game);
+}
+function restoreGame(snapshot){
+  game=clone(snapshot);
+  selectedSquare=null;
+  selectedMoves=[];
+  pendingPromotion=null;
+  renderGame();
+  if(game?.mode==="bot"&&game.turn===opposite(game.bot.side))scheduleBotMove();
+}
+
+/* ---------- ATAQUES Y JAQUE ---------- */
+
+function findKing(state,color){
+  const king=color==="w"?"K":"k";
+  return state.board.indexOf(king);
+}
+
+function isSquareAttacked(state,target,byColor){
+  const board=state.board;
+  const tr=Math.floor(target/8),tc=target%8;
+
+  // Peones
+  const pawnDirection=byColor==="w"?-1:1;
+  const pawnRow=tr-pawnDirection;
+  for(const dc of [-1,1]){
+    const c=tc+dc;
+    if(inside(pawnRow,c)){
+      const p=board[indexOf(pawnRow,c)];
+      if(p&&(colorOf(p)===byColor)&&pieceType(p)==="p")return true;
+    }
+  }
+
+  // Caballos
+  const knightSteps=[
+    [-2,-1],[-2,1],[-1,-2],[-1,2],
+    [1,-2],[1,2],[2,-1],[2,1]
+  ];
+  for(const [dr,dc] of knightSteps){
+    const r=tr+dr,c=tc+dc;
+    if(!inside(r,c))continue;
+    const p=board[indexOf(r,c)];
+    if(p&&colorOf(p)===byColor&&pieceType(p)==="n")return true;
+  }
+
+  // Rey
+  for(let dr=-1;dr<=1;dr++){
+    for(let dc=-1;dc<=1;dc++){
+      if(!dr&&!dc)continue;
+      const r=tr+dr,c=tc+dc;
+      if(!inside(r,c))continue;
+      const p=board[indexOf(r,c)];
+      if(p&&colorOf(p)===byColor&&pieceType(p)==="k")return true;
+    }
+  }
+
+  // Torres, alfiles y reina
+  const directions=[
+    [-1,0],[1,0],[0,-1],[0,1],
+    [-1,-1],[-1,1],[1,-1],[1,1]
+  ];
+  for(let d=0;d<directions.length;d++){
+    const [dr,dc]=directions[d];
+    let r=tr+dr,c=tc+dc,step=1;
+    while(inside(r,c)){
+      const p=board[indexOf(r,c)];
+      if(p){
+        if(colorOf(p)===byColor){
+          const t=pieceType(p);
+          const diagonal=d>=4;
+          if(t==="q"||(diagonal&&t==="b")||(!diagonal&&t==="r"))return true;
+          if(step===1&&t==="k")return true;
+        }
+        break;
+      }
+      r+=dr;c+=dc;step++;
+    }
+  }
+  return false;
+}
+
+function isInCheck(state,color){
+  const king=findKing(state,color);
+  if(king<0)return true;
+  return isSquareAttacked(state,king,opposite(color));
+}
+
+/* ---------- MOVIMIENTOS POSIBLES ---------- */
+
+function addMove(list,from,to,extra={}){
+  list.push({from,to,...extra});
+}
+
+function pseudoMoves(state,from){
+  const board=state.board;
+  const piece=board[from];
+  if(!piece)return [];
+  const color=colorOf(piece),type=pieceType(piece);
+  const r=Math.floor(from/8),c=from%8;
+  const moves=[];
+
+  const addIfEnemyOrEmpty=(rr,cc)=>{
+    if(!inside(rr,cc))return false;
+    const to=indexOf(rr,cc),target=board[to];
+    if(!target){addMove(moves,from,to);return true}
+    if(colorOf(target)!==color)addMove(moves,from,to);
+    return false;
+  };
+
+  if(type==="p"){
+    const dir=color==="w"?-1:1;
+    const startRow=color==="w"?6:1;
+    const promotionRow=color==="w"?0:7;
+    const oneR=r+dir;
+
+    if(inside(oneR,c)&&!board[indexOf(oneR,c)]){
+      const to=indexOf(oneR,c);
+      addMove(moves,from,to,oneR===promotionRow?{promotion:true}:{});
+      const twoR=r+2*dir;
+      if(r===startRow&&!board[indexOf(twoR,c)]){
+        addMove(moves,from,indexOf(twoR,c),{doublePawn:true});
+      }
+    }
+
+    for(const dc of [-1,1]){
+      const rr=r+dir,cc=c+dc;
+      if(!inside(rr,cc))continue;
+      const to=indexOf(rr,cc),target=board[to];
+      if(target&&colorOf(target)!==color){
+        addMove(moves,from,to,rr===promotionRow?{promotion:true}:{});
+      }else if(state.enPassant===to){
+        addMove(moves,from,to,{enPassant:true});
+      }
+    }
+  }
+
+  if(type==="n"){
+    const steps=[
+      [-2,-1],[-2,1],[-1,-2],[-1,2],
+      [1,-2],[1,2],[2,-1],[2,1]
+    ];
+    for(const [dr,dc] of steps)addIfEnemyOrEmpty(r+dr,c+dc);
+  }
+
+  if(type==="k"){
+    for(let dr=-1;dr<=1;dr++){
+      for(let dc=-1;dc<=1;dc++){
+        if(dr||dc)addIfEnemyOrEmpty(r+dr,c+dc);
+      }
+    }
+
+    // Enroque: el rey no puede estar en jaque ni cruzar casillas atacadas.
+    if(color==="w"&&from===60&&!isInCheck(state,"w")){
+      if(state.castling.K&&board[61]===null&&board[62]===null&&
+         board[63]==="R"&&!isSquareAttacked(state,61,"b")&&
+         !isSquareAttacked(state,62,"b")){
+        addMove(moves,60,62,{castle:"K"});
+      }
+      if(state.castling.Q&&board[59]===null&&board[58]===null&&board[57]===null&&
+         board[56]==="R"&&!isSquareAttacked(state,59,"b")&&
+         !isSquareAttacked(state,58,"b")){
+        addMove(moves,60,58,{castle:"Q"});
+      }
+    }
+    if(color==="b"&&from===4&&!isInCheck(state,"b")){
+      if(state.castling.k&&board[5]===null&&board[6]===null&&
+         board[7]==="r"&&!isSquareAttacked(state,5,"w")&&
+         !isSquareAttacked(state,6,"w")){
+        addMove(moves,4,6,{castle:"k"});
+      }
+      if(state.castling.q&&board[3]===null&&board[2]===null&&board[1]===null&&
+         board[0]==="r"&&!isSquareAttacked(state,3,"w")&&
+         !isSquareAttacked(state,2,"w")){
+        addMove(moves,4,2,{castle:"q"});
+      }
+    }
+  }
+
+  if(type==="r"||type==="b"||type==="q"){
+    const dirs=[];
+    if(type!=="b")dirs.push([-1,0],[1,0],[0,-1],[0,1]);
+    if(type!=="r")dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+    for(const [dr,dc] of dirs){
+      let rr=r+dr,cc=c+dc;
+      while(inside(rr,cc)){
+        const to=indexOf(rr,cc),target=board[to];
+        if(!target)addMove(moves,from,to);
+        else{
+          if(colorOf(target)!==color)addMove(moves,from,to);
+          break;
+        }
+        rr+=dr;cc+=dc;
+      }
+    }
+  }
+  return moves;
+}
+
+/* ---------- APLICAR MOVIMIENTO ---------- */
+
+function applyMove(state,move,record=false){
+  const board=state.board;
+  const piece=board[move.from];
+  if(!piece)return null;
+
+  const color=colorOf(piece),type=pieceType(piece);
+  let captured=board[move.to];
+
+  if(move.enPassant){
+    const captureSquare=move.to+(color==="w"?8:-8);
+    captured=board[captureSquare];
+    board[captureSquare]=null;
+  }
+
+  board[move.to]=piece;
+  board[move.from]=null;
+
+  if(move.promotion){
+    const promotion=move.promoteTo||"q";
+    board[move.to]=color==="w"?promotion.toUpperCase():promotion.toLowerCase();
+  }
+
+  if(move.castle){
+    if(move.castle==="K"){board[61]="R";board[63]=null}
+    if(move.castle==="Q"){board[59]="R";board[56]=null}
+    if(move.castle==="k"){board[5]="r";board[7]=null}
+    if(move.castle==="q"){board[3]="r";board[0]=null}
+  }
+
+  // Derechos de enroque
+  if(type==="k"){
+    if(color==="w"){state.castling.K=false;state.castling.Q=false}
+    else{state.castling.k=false;state.castling.q=false}
+  }
+  if(move.from===63)state.castling.K=false;
+  if(move.from===56)state.castling.Q=false;
+  if(move.from===7)state.castling.k=false;
+  if(move.from===0)state.castling.q=false;
+
+  // Capturar una torre en su casilla inicial también elimina su enroque.
+  if(move.to===63&&captured==="R")state.castling.K=false;
+  if(move.to===56&&captured==="R")state.castling.Q=false;
+  if(move.to===7&&captured==="r")state.castling.k=false;
+  if(move.to===0&&captured==="r")state.castling.q=false;
+
+  state.enPassant=null;
+  if(type==="p"&&Math.abs(move.to-move.from)===16){
+    state.enPassant=(move.from+move.to)/2;
+  }
+
+  if(type==="p"||captured)state.halfmove=0;
+  else state.halfmove++;
+
+  if(color==="b")state.fullmove++;
+  state.turn=opposite(color);
+  state.lastMove={from:move.from,to:move.to};
+
+  if(record){
+    if(captured)state.captured[color].push(captured);
+    const symbol=move.castle?(move.castle.toUpperCase()==="K"?"O-O":"O-O-O"):
+      (PIECES[piece]||piece)+squareName(move.from)+(captured?"x":"-")+squareName(move.to);
+    state.history.push({
+      number:state.fullmove-(color==="b"?0:1),
+      color,
+      text:symbol,
+      captured,
+      promotion:move.promoteTo||null
+    });
+  }
+  return {piece,captured};
+}
+
+/* ---------- MOVIMIENTOS LEGALES ---------- */
+
+function legalMovesFrom(state,from){
+  const piece=state.board[from];
+  if(!piece||colorOf(piece)!==state.turn)return [];
+  return pseudoMoves(state,from).filter(move=>{
+    const test=clone(state);
+    applyMove(test,move,false);
+    return !isInCheck(test,colorOf(piece));
+  });
+}
+
+function allLegalMoves(state,color=state.turn){
+  const result=[];
+  for(let i=0;i<64;i++){
+    const p=state.board[i];
+    if(p&&colorOf(p)===color){
+      const localState=state.turn===color?state: {...state,turn:color};
+      result.push(...legalMovesFrom(localState,i));
+    }
+  }
+  return result;
+}
+
+function registerPosition(state){
+  const castling=
+    (state.castling.K?"K":"")+
+    (state.castling.Q?"Q":"")+
+    (state.castling.k?"k":"")+
+    (state.castling.q?"q":"");
+  const key=state.board.map(p=>p||".").join("")+
+    state.turn+castling+(state.enPassant===null?"-":state.enPassant);
+  state.repetition[key]=(state.repetition[key]||0)+1;
+  state.positionKey=key;
+}
+
+function insufficientMaterial(state){
+  const pieces=state.board.filter(Boolean);
+  const nonKings=pieces.filter(p=>pieceType(p)!=="k");
+  if(nonKings.length===0)return true;
+  if(nonKings.length===1&&["b","n"].includes(pieceType(nonKings[0])))return true;
+  if(nonKings.every(p=>pieceType(p)==="b")){
+    const squares=state.board.map((p,i)=>p&&pieceType(p)==="b"?i:null).filter(v=>v!==null);
+    const colors=squares.map(i=>(Math.floor(i/8)+i%8)%2);
+    return colors.every(v=>v===colors[0]);
+  }
+  return false;
+}
+
+function getGameStatus(state){
+  const moves=allLegalMoves(state);
+  const check=isInCheck(state,state.turn);
+  if(moves.length===0){
+    if(check)return {type:"checkmate",winner:opposite(state.turn)};
+    return {type:"stalemate"};
+  }
+  if(insufficientMaterial(state))return {type:"draw",reason:"Material insuficiente"};
+  if(state.halfmove>=100)return {type:"draw",reason:"Regla de cincuenta movimientos"};
+  if(state.positionKey&&state.repetition[state.positionKey]>=3){
+    return {type:"draw",reason:"Triple repetición"};
+  }
+  return check?{type:"check"}:{type:"playing"};
+}
+
+/* ---------- RENDERIZADO DEL TABLERO ---------- */
+
+function renderGame(){
+  if(!game)return;
+  const boardEl=$("chessboard");
+  if(!boardEl)return;
+
+  boardEl.innerHTML="";
+  const legalTargets=selectedMoves.map(m=>m.to);
+  const checkedKing=isInCheck(game,game.turn)?findKing(game,game.turn):-1;
+
+  for(let i=0;i<64;i++){
+    const r=Math.floor(i/8),c=i%8;
+    const square=document.createElement("button");
+    square.type="button";
+    square.className="square "+((r+c)%2===0?"light":"dark");
+    square.dataset.index=i;
+    square.setAttribute("aria-label",squareName(i));
+
+    if(game.lastMove&&(game.lastMove.from===i||game.lastMove.to===i))
+      square.classList.add("last-move");
+    if(selectedSquare===i)square.classList.add("selected");
+    if(legalTargets.includes(i)&&settings.hints!==false){
+      const target=game.board[i];square.classList.add(target?"capture":"legal");
+    }
+    if(i===checkedKing)square.classList.add("in-check");
+
+    const piece=game.board[i];
+    if(piece){
+      const span=document.createElement("span");
+      span.className="piece "+(colorOf(piece)==="w"?"white":"black")+" piece-"+pieceType(piece);
+      span.textContent=PIECES[piece];
+      square.appendChild(span);
+    }
+    square.addEventListener("click",()=>handleSquareClick(i));
+    boardEl.appendChild(square);
+  }
+  refreshFantasy3D(boardEl,game.board,"chess");
+
+  $("turn-label").textContent=game.turn==="w"?"Turno de las blancas":"Turno de las negras";
+  $("check-status").textContent=isInCheck(game,game.turn)?"¡JAQUE!":"";
+  $("white-card").classList.toggle("active-player",game.turn==="w");
+  $("black-card").classList.toggle("active-player",game.turn==="b");
+
+  $("captured-white").textContent=game.captured.w.map(p=>PIECES[p]).join(" ");
+  $("captured-black").textContent=game.captured.b.map(p=>PIECES[p]).join(" ");
+
+  const history=$("move-history");
+  history.innerHTML="";
+  if(!game.history.length){
+    history.innerHTML='<div class="muted">Los movimientos aparecerán aquí.</div>';
+  }else{
+    const rows={};
+    game.history.forEach(item=>{
+      rows[item.number] ||= {w:"",b:""};
+      rows[item.number][item.color]=item.text;
+    });
+    Object.entries(rows).forEach(([number,row])=>{
+      const div=document.createElement("div");
+      div.className="history-row";
+      const a=document.createElement("span"),b=document.createElement("span"),c=document.createElement("span");
+      a.textContent=number+".";
+      b.textContent=row.w;
+      c.textContent=row.b;
+      div.append(a,b,c);
+      history.appendChild(div);
+    });
+    history.scrollTop=history.scrollHeight;
+  }
+  updatePlayerLabels();
+}
+
+function updatePlayerLabels(){
+  if(!game)return;
+  const botMode=game.mode==="bot";
+  $("white-name").textContent=botMode?
+    (game.bot.side==="w"?settings.whiteName:"BOT DEL REINO"):
+    settings.whiteName;
+  $("black-name").textContent=botMode?
+    (game.bot.side==="b"?settings.blackName:"BOT DEL REINO"):
+    settings.blackName;
+  $("white-avatar").textContent=botMode&&game.bot.side!=="w"?"🤖":settings.whiteAvatar;
+  $("black-avatar").textContent=botMode&&game.bot.side!=="b"?"🤖":settings.blackAvatar;
+}
+
+function animateMove(from,to,captured,movingGhost=null,capturedGhost=null){
+  if(!settings.animations)return;
+  const board=$("chessboard");
+  const source=board?.querySelector(`[data-index="${from}"]`);
+  const target=board?.querySelector(`[data-index="${to}"]`);
+  if(!target)return;
+  const targetRect=target.getBoundingClientRect();
+  const targetPiece=target.querySelector(".piece");
+  if(movingGhost&&source){
+    const sourceRect=source.getBoundingClientRect();
+    const ghost=movingGhost;
+    ghost.classList.add("fg-move-ghost");
+    ghost.style.left=(sourceRect.left+sourceRect.width*.11)+"px";
+    ghost.style.top=(sourceRect.top+sourceRect.height*.11)+"px";
+    ghost.style.width=Math.min(sourceRect.width,targetRect.width)*.78+"px";
+    ghost.style.height=Math.min(sourceRect.height,targetRect.height)*.78+"px";
+    ghost.style.animation="none";
+    ghost.style.fontSize=getComputedStyle(targetPiece||source).fontSize;
+    document.body.appendChild(ghost);
+    const dx=(targetRect.left+targetRect.width/2)-(sourceRect.left+sourceRect.width/2);
+    const dy=(targetRect.top+targetRect.height/2)-(sourceRect.top+sourceRect.height/2);
+    ghost.animate([
+      {transform:"translate3d(0,0,0) scale(1)",filter:"brightness(1)"},
+      {transform:`translate3d(${dx*.52}px,${dy*.52-18}px,0) scale(1.18)`,filter:"brightness(1.45)"},
+      {transform:`translate3d(${dx}px,${dy}px,0) scale(1)`,filter:"brightness(1.08)"}
+    ],{duration:settings.animations?360:1,easing:"cubic-bezier(.2,.8,.2,1)"}).onfinish=()=>ghost.remove();
+  }
+  if(captured&&capturedGhost){
+    capturedGhost.classList.add("fg-capture-ghost");
+    capturedGhost.style.left=(targetRect.left+targetRect.width*.12)+"px";
+    capturedGhost.style.top=(targetRect.top+targetRect.height*.08)+"px";
+    capturedGhost.style.width=targetRect.width*.76+"px";
+    capturedGhost.style.height=targetRect.height*.76+"px";
+    capturedGhost.style.fontSize=getComputedStyle(capturedGhost).fontSize;
+    capturedGhost.style.animation="none";
+    document.body.appendChild(capturedGhost);
+    capturedGhost.animate([{opacity:1,transform:"scale(1) rotate(0)"},{opacity:0,transform:"scale(.12) rotate(35deg)"}],{duration:380,easing:"ease-out"}).onfinish=()=>capturedGhost.remove();
+    target.animate([{filter:"brightness(2.2)"},{filter:"brightness(1)"}],{duration:420});
+  }else if(targetPiece){
+    targetPiece.animate([{transform:"translateY(-18px) scale(1.22)",filter:"brightness(1.8)"},{transform:"translateY(-2px) scale(1)",filter:"brightness(1)"}],{duration:340,easing:"cubic-bezier(.2,.8,.2,1)"});
+  }
+}
+
+/* ---------- SELECCIÓN Y MOVIMIENTOS DEL JUGADOR ---------- */
+
+function handleSquareClick(index){
+  if(!game||game.over||gamePaused||botThinking||pendingPromotion)return;
+  if(game.mode==="bot"&&game.turn!==game.bot.side)return;
+  if(game.mode==="online"&&(!onlineMatch||game.turn!==onlineMatch.color||onlineMovePending))return;
+
+  const piece=game.board[index];
+
+  if(selectedSquare!==null){
+    const candidate=selectedMoves.filter(m=>m.to===index);
+    if(candidate.length){
+      const move=candidate[0];
+      if(move.promotion){
+        pendingPromotion={...move};
+        openModal("modal-promotion");
+      }else{
+        commitMove(move);
+      }
+      return;
+    }
+  }
+
+  if(piece&&colorOf(piece)===game.turn){
+    selectedSquare=index;
+    selectedMoves=legalMovesFrom(game,index);
+  }else{
+    selectedSquare=null;
+    selectedMoves=[];
+  }
+  renderGame();
+}
+
+function commitMove(move){
+  if(!game||game.over)return;
+  if(game.mode==="online"){
+    if(!onlineMatch||!onlineSocket?.connected||onlineMovePending)return;
+    onlineMovePending=true;
+    onlineSocket.timeout(10000).emit("game:move",{from:move.from,to:move.to,promotion:move.promoteTo||"q"},(err,response)=>{
+      if(err||!response?.ok){onlineMovePending=false;showToast(response?.error||"No se pudo enviar el movimiento.");}
+    });
+    return;
+  }
+  undoStack.push(snapshotGame());
+  const movingPiece=game.board[move.from];
+  const movingColor=colorOf(movingPiece);
+  const boardNode=$("chessboard");
+  const movingNode=boardNode?.querySelector(`[data-index="${move.from}"] .piece`);
+  const capturedNode=boardNode?.querySelector(`[data-index="${move.to}"] .piece`);
+  const movingGhost=movingNode?movingNode.cloneNode(true):null;
+  const capturedGhost=capturedNode?capturedNode.cloneNode(true):null;
+  const outcome=applyMove(game,move,true);
+  registerPosition(game);
+
+  selectedSquare=null;
+  selectedMoves=[];
+  pendingPromotion=null;
+  closeModal("modal-promotion");
+
+  renderGame();
+  animateMove(move.from,move.to,outcome?.captured,movingGhost,capturedGhost);
+  playSound(outcome?.captured?"capture":"move");
+
+  const status=getGameStatus(game);
+  if(status.type==="check")playSound("check");
+  if(status.type==="checkmate"||status.type==="stalemate"||status.type==="draw"){
+    finishGame(status);
+    return;
+  }
+
+  if(game.mode==="bot"&&game.turn===opposite(game.bot.side)){
+    scheduleBotMove();
+  }
+}
+
+function undoMove(){
+  if(game?.mode==="online"){showToast("En partidas online no se puede deshacer un movimiento.");return;}
+  if(!game||!undoStack.length||game.over&&game.result)return;
+  clearTimeout(botTimer);
+  botThinking=false;
+
+  let steps=1;
+  if(game.mode==="bot"&&game.history.length>=2)steps=2;
+  while(steps--&&undoStack.length){
+    const snapshot=undoStack.pop();
+    restoreGame(snapshot);
+  }
+  game.over=false;
+  game.result=null;
+  closeAllModals();
+  showToast("Movimiento deshecho.");
+}
+
+/* ---------- FINAL DE PARTIDA Y ESTADÍSTICAS ---------- */
+
+function readStats(){
+  return safeLoad("fantasyChess5Stats",{games:0,wins:0,losses:0,draws:0,whiteWins:0,blackWins:0});
+}
+function saveStats(status){
+  const stats=readStats();
+  stats.games++;
+  if(status.type==="draw"||status.type==="stalemate"){
+    stats.draws++;
+  }else if(game.mode==="bot"){
+    if(status.winner===opposite(game.bot.side))stats.losses++;
+    else stats.wins++;
+  }else if(game.mode==="online"){
+    if(status.winner===onlineMatch?.color)stats.wins++;else stats.losses++;
+  }else{
+    if(status.winner==="w")stats.whiteWins++;
+    if(status.winner==="b")stats.blackWins++;
+    // En partidas locales hay dos participantes: una victoria y una derrota.
+    if(status.winner==="w"||status.winner==="b"){
+      stats.wins++;
+      stats.losses++;
+    }
+  }
+  safeSave("fantasyChess5Stats",stats);
+  updateHall();
+}
+
+function finishGame(status){
+  if(game.over)return;
+  game.over=true;
+  game.result=status;
+  clearTimeout(botTimer);
+  botThinking=false;
+  saveStats(status);
+  grantArsenalReward("chess",status,game.mode);
+
+  let title="FIN DE LA BATALLA",message="";
+  if(status.type==="checkmate"){
+    title="¡JAQUE MATE!";
+    message=status.winner==="w"?"El Reino de la Luz ha conquistado la victoria.":"El Reino de las Sombras ha conquistado la victoria.";
+    if(game.mode==="bot"){
+      message=status.winner===opposite(game.bot.side)?
+        "El BOT ha ganado esta batalla. ¡Prepárate para la revancha!":
+        "¡Victoria! Has derrotado al guardián del reino.";
+    }
+  }else if(status.type==="stalemate"){
+    title="BATALLA EN TABLAS";
+    message="Ningún reino ha podido conquistar la victoria.";
+  }else{
+    title="EMPATE";
+    message=status.reason||"La partida ha terminado en tablas.";
+  }
+  $("result-title").textContent=title;
+  $("result-message").textContent=message;
+  playSound(status.winner?"victory":"move");
+  openModal("modal-result");
+}
+
+function updateHall(){
+  const chess=readStats();
+  const checkers=safeLoad("fantasyGames6CheckersStats",{games:0,wins:0,losses:0,draws:0});
+  $("stat-games").textContent=(chess.games||0)+(checkers.games||0);
+  $("stat-wins").textContent=(chess.wins||0)+(checkers.wins||0);
+  $("stat-losses").textContent=(chess.losses||0)+(checkers.losses||0);
+  $("stat-draws").textContent=(chess.draws||0)+(checkers.draws||0);
+}
+
+/* ---------- BOT: EVALUACIÓN Y BÚSQUEDA ---------- */
+
+function evaluateBoard(state,botColor){
+  let score=0;
+  for(let i=0;i<64;i++){
+    const p=state.board[i];
+    if(!p)continue;
+    const type=pieceType(p),color=colorOf(p);
+    const value=VALUES[type]||0;
+    const row=Math.floor(i/8),col=i%8;
+    const center=3.5-(Math.abs(3.5-row)+Math.abs(3.5-col))/2;
+    let positional=0;
+    if(type==="p")positional=(color==="w"?(6-row):(row-1))*7;
+    if(type==="n"||type==="b")positional=center*8;
+    if(type==="q")positional=center*2;
+    const total=value+positional;
+    score+=color===botColor?total:-total;
+  }
+  return score;
+}
+
+function orderMoves(state,moves){
+  return moves.sort((a,b)=>{
+    const score=m=>{
+      const victim=state.board[m.to];
+      const attacker=state.board[m.from];
+      return (victim?(VALUES[pieceType(victim)]||0)*10-(VALUES[pieceType(attacker)]||0):0)
+        +(m.promotion?800:0)+(m.castle?30:0);
+    };
+    return score(b)-score(a);
+  });
+}
+
+function minimax(state,depth,alpha,beta,maximizing,botColor){
+  const moves=allLegalMoves(state);
+  const checked=isInCheck(state,state.turn);
+  if(!moves.length){
+    if(checked)return state.turn===botColor?-100000-depth:100000+depth;
+    return 0;
+  }
+  if(depth===0)return evaluateBoard(state,botColor);
+  if(state.halfmove>=100||insufficientMaterial(state))return 0;
+
+  const ordered=orderMoves(state,moves);
+  if(maximizing){
+    let best=-Infinity;
+    for(const move of ordered){
+      const next=clone(state);
+      if(move.promotion)move.promoteTo="q";
+      applyMove(next,move,false);
+      const value=minimax(next,depth-1,alpha,beta,false,botColor);
+      best=Math.max(best,value);
+      alpha=Math.max(alpha,best);
+      if(beta<=alpha)break;
+    }
+    return best;
+  }else{
+    let best=Infinity;
+    for(const move of ordered){
+      const next=clone(state);
+      if(move.promotion)move.promoteTo="q";
+      applyMove(next,move,false);
+      const value=minimax(next,depth-1,alpha,beta,true,botColor);
+      best=Math.min(best,value);
+      beta=Math.min(beta,best);
+      if(beta<=alpha)break;
+    }
+    return best;
+  }
+}
+
+function chooseBotMove(){
+  const moves=allLegalMoves(game);
+  if(!moves.length)return null;
+  const level=game.bot.level;
+  if(level===1)return moves[Math.floor(Math.random()*moves.length)];
+
+  if(level===2){
+    const ordered=orderMoves(game,moves);
+    const top=ordered.slice(0,Math.min(5,ordered.length));
+    return top[Math.floor(Math.random()*top.length)];
+  }
+
+  let bestMove=null,bestScore=-Infinity;
+  const depth=level===3?2:3;
+  const ordered=orderMoves(game,moves);
+  for(const move of ordered){
+    const next=clone(game);
+    if(move.promotion)move.promoteTo="q";
+    applyMove(next,move,false);
+    const score=minimax(next,depth-1,-Infinity,Infinity,false,opposite(game.bot.side));
+    if(score>bestScore){bestScore=score;bestMove=move}
+  }
+  return bestMove||moves[0];
+}
+
+function scheduleBotMove(){
+  if(!game||game.over||gamePaused||game.mode!=="bot"||!game.bot||game.turn!==opposite(game.bot.side))return;
+  clearTimeout(botTimer);
+  botThinking=true;
+  showToast("El guardián del reino está pensando...");
+  const gameAtSchedule=game;
+  botTimer=setTimeout(()=>{
+    if(game!==gameAtSchedule||!game||game.over||gamePaused||game.mode!=="bot"||game.turn!==opposite(game.bot.side)){if(game===gameAtSchedule)botThinking=false;return;}
+    try{
+      const move=chooseBotMove();
+      if(!move){botThinking=false;finishGame(getGameStatus(game));return;}
+      botThinking=false;
+      commitMove(move);
+    }catch(error){
+      console.error("Error del BOT de ajedrez:",error);
+      botThinking=false;
+      // Recuperación segura: si falla la búsqueda, intenta una jugada legal aleatoria.
+      try{const fallback=allLegalMoves(game);if(fallback.length)commitMove(fallback[Math.floor(Math.random()*fallback.length)]);else finishGame(getGameStatus(game));}
+      catch(recoveryError){console.error("No se pudo recuperar el turno del BOT:",recoveryError);showToast("El BOT tuvo un error. Reinicia la partida.");}
+    }
+  },game.bot.level>=3?500:650);
+}
+
+/* ---------- AJUSTES Y TEMAS ---------- */
+
+function applyTheme(theme){
+  const themes={
+    royal:{light:["#f4fbff","#c4def1","#789fbe"],dark:["#344b68","#172b45","#0a1525"]},
+    forest:{light:["#e8f4e4","#b9d5b1","#739779"],dark:["#365b4b","#1d3d35","#0d211f"]},
+    ice:{light:["#ffffff","#d8f0ff","#91bcd9"],dark:["#416a8b","#214766","#10263f"]},
+    obsidian:{light:["#dce6f2","#9aadc3","#586d87"],dark:["#35445b","#1b293e","#090f1d"]}
+  };
+  const colors=themes[theme]||themes.royal;
+  const root=document.documentElement;
+  root.dataset.boardTheme=theme in themes?theme:"royal";
+  ["--tile-light-1","--tile-light-2","--tile-light-3"].forEach((key,i)=>root.style.setProperty(key,colors.light[i]));
+  ["--tile-dark-1","--tile-dark-2","--tile-dark-3"].forEach((key,i)=>root.style.setProperty(key,colors.dark[i]));
+  root.style.setProperty("--tile-light",colors.light[1]);
+  root.style.setProperty("--tile-dark",colors.dark[1]);
+}
+
+function syncSettingsControls(){
+  const ids={"setting-white-name":"whiteName","setting-black-name":"blackName","setting-white-avatar":"whiteAvatar","setting-black-avatar":"blackAvatar","setting-theme":"theme","setting-chess-palette":"chessPalette","setting-chess-white":"chessWhite","setting-chess-black":"chessBlack","setting-draught-palette":"draughtPalette","setting-draught-shape":"draughtShape","setting-volume":"volume","setting-quality":"quality"};
+  for(const [id,key] of Object.entries(ids)){const el=$(id);if(el)el.value=settings[key]??SETTINGS_DEFAULT[key]}
+  for(const [id,key] of Object.entries({"setting-sound":"sound","setting-animations":"animations","setting-particles":"particles","setting-hints":"hints","setting-reduced-motion":"reducedMotion"})){const el=$(id);if(el)el.checked=!!settings[key]}
+}
+function applyVisualSettings(){
+  const root=document.documentElement;
+  root.dataset.chessPalette=settings.chessPalette||"silver";
+  root.dataset.chessWhite=settings.chessWhite||"silver";root.dataset.chessBlack=settings.chessBlack||"gold";
+  root.dataset.draughtPalette=settings.draughtPalette||"classic";
+  root.dataset.draughtShape=settings.draughtShape||"round";
+  root.dataset.hints=settings.hints===false?"off":"on";
+  root.dataset.quality=settings.quality||"high";
+  root.dataset.animations=settings.animations===false?"off":"on";
+  root.style.setProperty("--effect-volume",String((settings.volume??70)/100));
+  if(settings.reducedMotion)root.classList.add("reduced-motion");else root.classList.remove("reduced-motion");
+}
+function loadSettings(){
+  settings={...SETTINGS_DEFAULT,...safeLoad("fantasyChess5Settings",{})};
+  if(settings.chessBlack==="crimson")settings.chessBlack="blue";
+  if(!["silver","ivory","emerald"].includes(settings.chessWhite))settings.chessWhite="silver";
+  if(!["gold","steel","blue"].includes(settings.chessBlack))settings.chessBlack="gold";
+  if(!["silver","ivory","emerald"].includes(settings.chessPalette))settings.chessPalette="silver";
+  if(!["classic","royal","arcane"].includes(settings.draughtPalette))settings.draughtPalette="classic";
+  if(!["round","gem","rune"].includes(settings.draughtShape))settings.draughtShape="round";
+  syncSettingsControls();applyTheme(settings.theme);applyVisualSettings();createParticles();
+}
+function saveSettings(){
+  settings={...SETTINGS_DEFAULT,
+    whiteName:$("setting-white-name").value.trim()||"Reino de la Luz",blackName:$("setting-black-name").value.trim()||"Reino de las Sombras",
+    whiteAvatar:$("setting-white-avatar").value,blackAvatar:$("setting-black-avatar").value,theme:$("setting-theme").value,
+    sound:$("setting-sound").checked,animations:$("setting-animations").checked,particles:$("setting-particles").checked,
+    hints:$("setting-hints").checked,reducedMotion:$("setting-reduced-motion").checked,
+    chessPalette:$("setting-chess-palette").value,chessWhite:$("setting-chess-white").value,chessBlack:$("setting-chess-black").value,
+    draughtPalette:$("setting-draught-palette").value,draughtShape:$("setting-draught-shape").value,
+    volume:Number($("setting-volume").value),quality:$("setting-quality").value
+  };
+  safeSave("fantasyChess5Settings",settings);applyTheme(settings.theme);applyVisualSettings();createParticles();updatePlayerLabels();
+  if(game)renderGame();if(cc)renderChinese();showToast("¡El arsenal de los reinos ha sido actualizado!");
+}
+function resetSettings(){settings={...SETTINGS_DEFAULT};syncSettingsControls();saveSettings();}
+
+
+function createParticles(){
+  const container=$("particles");
+  if(!container)return;
+  container.innerHTML="";
+  if(!settings.particles)return;
+  const particleCount=settings.quality==="low"?8:settings.quality==="balanced"?18:32;
+  for(let i=0;i<particleCount;i++){
+    const p=document.createElement("span");
+    p.className="particle";
+    p.style.left=Math.random()*100+"%";
+    p.style.bottom=(-Math.random()*30)+"px";
+    p.style.animationDuration=(9+Math.random()*15)+"s";
+    p.style.animationDelay=(-Math.random()*20)+"s";
+    p.style.opacity=(.2+Math.random()*.6);
+    container.appendChild(p);
+  }
+}
+
+/* ---------- MULTIJUGADOR ONLINE · SOCKET.IO + SERVIDOR AUTORITATIVO ---------- */
+let onlineSocket=null;
+let onlineMatch=null;
+let onlineMovePending=false;
+let currentRoomCode="";
+let onlineDisconnectReason="";
+
+function onlineServerBase(){
+  const raw=($("server-url")?.value||"").trim();
+  if(!raw)return null;
+  try{
+    const url=new URL(raw);
+    const local=["localhost","127.0.0.1","::1"].includes(url.hostname);
+    if(url.protocol!=="https:"&&!(local&&url.protocol==="http:"))return null;
+    return url.origin;
+  }catch(e){return null;}
+}
+function onlineStatus(message){const el=$("online-status");if(el)el.textContent=message;}
+function connectOnlineServer(){
+  const base=onlineServerBase();
+  if(!base){onlineStatus("Escribe una dirección HTTPS válida del servidor.");showToast("Dirección del servidor no válida.");return;}
+  if(!window.io){onlineStatus("No se pudo cargar Socket.IO. Revisa tu conexión a internet y recarga el juego.");return;}
+  if(onlineSocket){onlineSocket.removeAllListeners();onlineSocket.disconnect();onlineSocket=null;}
+  try{localStorage.setItem("fantasyGamesServerUrl",base);}catch(e){}
+  onlineStatus("Conectando con el servidor…");
+  const socket=window.io(base,{transports:["websocket","polling"],timeout:12000,reconnection:true,reconnectionAttempts:8,reconnectionDelay:1000});
+  onlineSocket=socket;
+  socket.on("connect",()=>{onlineStatus("Conectado al servidor. Ya puedes crear o unirte a una sala.");showToast("¡Conexión con el reino establecida!");});
+  socket.on("connect_error",()=>{onlineStatus("No se pudo conectar. Comprueba la dirección HTTPS y que Render tenga el servicio activo.");});
+  socket.on("disconnect",reason=>{
+    onlineStatus("Conexión perdida ("+reason+"). Vuelve a conectar para crear otra sala.");
+    if(onlineMatch){onlineMatch=null;onlineMovePending=false;showToast("Se perdió la conexión con la partida online.");}
+  });
+  socket.on("room:waiting",data=>{
+    currentRoomCode=data.code||"";
+    $("room-code").textContent=currentRoomCode||"------";
+    onlineStatus("Sala "+currentRoomCode+" creada. Esperando al segundo jugador…");
+  });
+  socket.on("room:ready",startOnlineMatch);
+  socket.on("room:opponent-left",data=>{
+    onlineMovePending=false;
+    onlineStatus(data?.message||"Tu rival salió de la sala.");
+    showToast("Tu rival abandonó la sala.");
+    onlineMatch=null;
+  });
+  socket.on("game:move",receiveOnlineMove);
+  socket.on("game:forfeit",data=>{
+    if(!onlineMatch)return;
+    if(data.gameType==="chess"&&game?.mode==="online")finishGame({type:"checkmate",winner:data.winner});
+    else if(data.gameType==="checkers"&&cc?.mode==="online")dFinish(data.winner);
+  });
+}
+function socketRequest(eventName,payload){
+  return new Promise(resolve=>{
+    if(!onlineSocket?.connected){resolve({ok:false,error:"Primero conecta el servidor."});return;}
+    onlineSocket.timeout(10000).emit(eventName,payload,(err,response)=>resolve(err?{ok:false,error:"El servidor no respondió."}:response||{ok:false,error:"Respuesta vacía del servidor."}));
+  });
+}
+async function createOnlineRoom(){
+  if(!onlineSocket?.connected){showToast("Primero conecta el servidor.");onlineStatus("Conecta el servidor antes de crear una sala.");return;}
+  const gameType=$("online-game-type").value==="checkers"?"checkers":"chess";
+  onlineStatus("Creando sala segura…");
+  const result=await socketRequest("room:create",{gameType});
+  if(!result.ok){onlineStatus(result.error||"No se pudo crear la sala.");showToast(result.error||"Error al crear la sala.");return;}
+  currentRoomCode=result.code;
+  $("room-code").textContent=currentRoomCode;
+  onlineStatus("Sala "+currentRoomCode+" creada. Comparte el código y espera a tu rival.");
+  showToast("¡Sala online creada!");
+}
+async function joinOnlineRoom(){
+  if(!onlineSocket?.connected){showToast("Primero conecta el servidor.");onlineStatus("Conecta el servidor antes de unirte.");return;}
+  const code=$("join-room-code").value.trim().toUpperCase();
+  if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){showToast("Introduce un código de seis caracteres válido.");return;}
+  onlineStatus("Buscando la sala " + code + "…");
+  const result=await socketRequest("room:join",{code});
+  if(!result.ok){onlineStatus(result.error||"No se pudo entrar a la sala.");showToast(result.error||"No se pudo entrar.");return;}
+  currentRoomCode=code;
+  $("room-code").textContent=code;
+  onlineStatus("Sala encontrada. Preparando la partida…");
+}
+function startOnlineMatch(data){
+  if(!data||!data.roomCode||!data.color)return;
+  onlineMatch={roomCode:data.roomCode,gameType:data.gameType,color:data.color};
+  currentRoomCode=data.roomCode;
+  onlineMovePending=false;
+  onlineStatus("Partida activa · Sala "+data.roomCode+" · " +(data.color==="w"||data.color==="r"?"Juegas primero":"Juegas segundo"));
+  if(data.gameType==="checkers"){
+    dStart("online",data.color,2);
+  }else{
+    createGame("online");
+    if(data.chessFen&&data.chessFen!=="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"){
+      onlineStatus("La sala ya tiene una posición activa. Vuelve a crearla si acabas de reconectar.");
+    }
+  }
+  showToast("¡Tu rival se ha unido! Comienza la batalla.");
+}
+function leaveOnlineMatch(){
+  if(onlineSocket?.connected&&currentRoomCode)onlineSocket.emit("room:leave",()=>{});
+  onlineMatch=null;onlineMovePending=false;currentRoomCode="";
+  if($("room-code"))$("room-code").textContent="------";
+}
+function indexToChessSquare(index){return String.fromCharCode(97+(index%8))+String(8-Math.floor(index/8));}
+function receiveOnlineMove(payload){
+  if(!onlineMatch||!payload||payload.gameType!==onlineMatch.gameType)return;
+  onlineMovePending=false;
+  if(payload.gameType==="chess"){
+    if(!game||game.mode!=="online")return;
+    const from=Number(payload.move?.from),to=Number(payload.move?.to);
+    const options=allLegalMoves(game).filter(m=>m.from===from&&m.to===to);
+    if(!options.length){onlineStatus("La posición local se desincronizó. Sal y vuelve a crear la sala.");showToast("Error de sincronización del tablero.");return;}
+    let move=options[0];
+    if(move.promotion)move={...move,promoteTo:payload.move.promotion||"q"};
+    undoStack.push(snapshotGame());
+    const outcome=applyMove(game,move,true);
+    registerPosition(game);
+    selectedSquare=null;selectedMoves=[];pendingPromotion=null;closeModal("modal-promotion");
+    renderGame();
+    if(outcome?.captured)playSound("capture");else playSound("move");
+    const status=getGameStatus(game);
+    if(status.type==="check")playSound("check");
+    if(["checkmate","stalemate","draw"].includes(status.type))finishGame(status);
+    return;
+  }
+  if(payload.gameType==="checkers"){
+    if(!cc||cc.mode!=="online")return;
+    const from=Number(payload.move?.from),to=Number(payload.move?.to);
+    const possible=cc.chainFrom!==null?dRawMoves(cc.board,cc.chainFrom,true):dAllMoves(cc.turn);
+    const move=possible.find(m=>m.from===from&&m.to===to);
+    if(!move){onlineStatus("Las damas se desincronizaron. Crea una nueva sala.");showToast("Error de sincronización de damas.");return;}
+    dPlay(move,true);
+  }
+}
+function initOnlineMultiplayer(){
+  let saved="";try{saved=localStorage.getItem("fantasyGamesServerUrl")||"";}catch(e){}
+  if(saved&&$("server-url"))$("server-url").value=saved;
+  $("btn-connect-server")?.addEventListener("click",connectOnlineServer);
+}
+
+/* ---------- EVENTOS DE INTERFAZ ---------- */
+
+function bindEvents(){
+  $("btn-local").addEventListener("click",()=>createGame("local"));
+  $("btn-bot").addEventListener("click",()=>openModal("modal-bot"));
+  $("btn-online").addEventListener("click",()=>showScreen("online"));
+  $("btn-settings").addEventListener("click",()=>showScreen("settings"));
+  $("btn-hall").addEventListener("click",()=>{updateHall();showScreen("hall")});
+  $("btn-dedication").addEventListener("click",()=>showScreen("dedication"));
+
+  document.querySelectorAll("[data-screen]").forEach(button=>{
+    button.addEventListener("click",()=>showScreen(button.dataset.screen));
+  });
+  document.querySelectorAll("[data-close]").forEach(button=>{
+    button.addEventListener("click",()=>closeModal(button.dataset.close));
+  });
+
+  $("btn-start-bot").addEventListener("click",()=>{
+    const config={
+      level:Number($("bot-level").value),
+      side:$("bot-side").value
+    };
+    closeModal("modal-bot");
+    createGame("bot",config);
+  });
+
+  $("promotion-options").addEventListener("click",event=>{
+    const button=event.target.closest("[data-promote]");
+    if(!button||!pendingPromotion)return;
+    const move={...pendingPromotion,promoteTo:button.dataset.promote};
+    commitMove(move);
+  });
+
+  $("btn-game-menu").addEventListener("click",()=>{
+    clearTimeout(botTimer);botThinking=false;
+    if(game?.mode==="online")leaveOnlineMatch();
+    closeAllModals();showScreen("menu");
+  });
+  $("btn-undo").addEventListener("click",undoMove);
+  $("btn-pause").addEventListener("click",()=>{
+    if(game?.mode==="online"){showToast("No puedes pausar una partida compartida.");return;}
+    if(!game||game.over)return;
+    gamePaused=true;
+    clearTimeout(botTimer);botThinking=false;
+    openModal("modal-pause");
+  });
+  $("btn-resume").addEventListener("click",()=>{
+    gamePaused=false;closeModal("modal-pause");
+    if(game?.mode==="bot"&&game.turn===opposite(game.bot.side))scheduleBotMove();
+  });
+  $("btn-pause-menu").addEventListener("click",()=>{
+    if(game?.mode==="online")leaveOnlineMatch();
+    gamePaused=false;closeAllModals();showScreen("menu");
+  });
+  $("btn-restart").addEventListener("click",()=>{
+    if(game?.mode==="online"){showToast("Para otra partida, crea una nueva sala online.");leaveOnlineMatch();showScreen("online");return;}
+    if(!game)return;
+    const mode=game.mode,bot=game.bot?{...game.bot}:null;
+    createGame(mode,bot);
+    showToast("¡Nueva batalla!");
+  });
+  $("btn-resign").addEventListener("click",()=>{
+    if(!game||game.over)return;
+    if(game.mode==="online"){
+      if(onlineSocket?.connected)onlineSocket.timeout(8000).emit("game:resign",(err,response)=>{if(err||!response?.ok)showToast(response?.error||"No se pudo rendir la partida.");});
+      return;
+    }
+    const winner=opposite(game.turn);
+    finishGame({type:"checkmate",winner});
+  });
+
+  $("btn-result-rematch").addEventListener("click",()=>{
+    const mode=lastGameMode,bot=mode==="bot"?{...lastBotConfig}:null;
+    if(mode==="online"){leaveOnlineMatch();showScreen("online");showToast("Crea una nueva sala para la revancha.");return;}
+    createGame(mode,bot);
+  });
+  $("btn-result-menu").addEventListener("click",()=>{
+    if(game?.mode==="online")leaveOnlineMatch();
+    closeAllModals();showScreen("menu");
+  });
+
+  $("btn-save-settings").addEventListener("click",saveSettings);
+  $("btn-reset-settings").addEventListener("click",resetSettings);
+  $("btn-reset-stats").addEventListener("click",()=>{
+    if(!confirm("¿Quieres reiniciar todas las estadísticas?"))return;
+    safeSave("fantasyChess5Stats",{games:0,wins:0,losses:0,draws:0,whiteWins:0,blackWins:0});
+    safeSave("fantasyGames6CheckersStats",{games:0,wins:0,losses:0,draws:0});
+    updateHall();showToast("Estadísticas reiniciadas.");
+  });
+
+  $("btn-create-room").addEventListener("click",createOnlineRoom);
+  $("btn-join-room").addEventListener("click",joinOnlineRoom);
+  $("btn-copy-room").addEventListener("click",()=>{
+    if(!currentRoomCode){showToast("Primero genera un código.");return}
+    if(navigator.clipboard?.writeText){
+      navigator.clipboard.writeText(currentRoomCode)
+        .then(()=>showToast("Código copiado."))
+        .catch(()=>showToast("No se pudo copiar el código."));
+    }else showToast("Código: "+currentRoomCode);
+  });
+
+  $("setting-theme").addEventListener("change",e=>applyTheme(e.target.value));
+  $("setting-chess-palette").addEventListener("change",e=>{
+    const presets={silver:["silver","gold"],ivory:["ivory","steel"],emerald:["emerald","gold"]};
+    const pair=presets[e.target.value]||presets.silver;
+    $("setting-chess-white").value=pair[0];
+    $("setting-chess-black").value=pair[1];
+  });
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape")closeAllModals();
+  });
+}
+
+/* ---------- INICIALIZACIÓN ---------- */
+
+function initFantasyChess(){
+  loadSettings();
+  bindEvents();
+  updateHall();
+  showScreen("menu");
+  console.log("Fantasy Games 8.6 iniciado.");
+}
+
+
+/* =========================================================
+   FANTASY GAMES 8.1 — DAMAS CLÁSICAS 8×8
+   Captura obligatoria, cadenas, coronación y BOT heurístico.
+   ========================================================= */
+let cc=null;
+let ccSetup={mode:"bot",side:"r",level:2};
+let ccBotTimer=null;
+const DRAUGHT_DIRECTIONS={r:[[-1,-1],[-1,1]],b:[[1,-1],[1,1]]};
+function dPieceColor(p){return p?p.toLowerCase():null}
+function dIsKing(p){return !!p&&p!==p.toLowerCase()}
+function dInside(r,c){return r>=0&&r<8&&c>=0&&c<8}
+function dIndex(r,c){return r*8+c}
+function dRC(i){return [Math.floor(i/8),i%8]}
+function dDirections(p){return dIsKing(p)?[[-1,-1],[-1,1],[1,-1],[1,1]]:DRAUGHT_DIRECTIONS[dPieceColor(p)]}
+function dInitialBoard(){
+  const b=Array(64).fill(null);
+  for(let r=0;r<3;r++)for(let c=0;c<8;c++)if((r+c)%2===1)b[dIndex(r,c)]='b';
+  for(let r=5;r<8;r++)for(let c=0;c<8;c++)if((r+c)%2===1)b[dIndex(r,c)]='r';
+  return b;
+}
+function dRawMoves(board,from,capturesOnly=false){
+  const p=board[from];if(!p)return [];
+  const color=dPieceColor(p),[r,c]=dRC(from),out=[];
+  for(const [dr,dc] of dDirections(p)){
+    const r1=r+dr,c1=c+dc,r2=r+2*dr,c2=c+2*dc;
+    if(!dInside(r1,c1))continue;
+    const mid=dIndex(r1,c1);
+    if(!board[mid]&&!capturesOnly)out.push({from,to:mid,capture:null});
+    else if(board[mid]&&dPieceColor(board[mid])!==color&&dInside(r2,c2)){
+      const to=dIndex(r2,c2);if(!board[to])out.push({from,to,capture:mid});
+    }
+  }
+  return out;
+}
+function dAllMoves(color=cc?.turn){
+  if(!cc)return [];
+  const captures=[];const regular=[];
+  for(let i=0;i<64;i++)if(dPieceColor(cc.board[i])===color){
+    const ms=dRawMoves(cc.board,i,false);
+    captures.push(...ms.filter(m=>m.capture!==null));
+    regular.push(...ms.filter(m=>m.capture===null));
+  }
+  return captures.length?captures:regular;
+}
+function dMovesFrom(from){
+  if(!cc||dPieceColor(cc.board[from])!==cc.turn)return [];
+  if(cc.chainFrom!==null&&cc.chainFrom!==from)return [];
+  const moves=dRawMoves(cc.board,from,false);
+  if(cc.chainFrom!==null)return moves.filter(m=>m.capture!==null);
+  const forced=dAllMoves(cc.turn).some(m=>m.capture!==null);
+  return forced?moves.filter(m=>m.capture!==null):moves;
+}
+function dStart(mode,side,level){
+  clearTimeout(ccBotTimer);
+  ccSetup={mode,side,level};
+  cc={board:dInitialBoard(),turn:'r',mode,side,level,selected:null,legal:[],chainFrom:null,over:false,history:[],lastMove:null,startedAt:Date.now(),quiet:0};
+  renderChinese();showScreen('chinese');
+  if(mode==='bot'&&cc.turn!==side)dScheduleBot();
+}
+function ccOpenSetup(){openModal('modal-chinese-setup')}
+function dSelect(index){
+  if(!cc||cc.over||cc.mode==='bot'&&cc.turn!==cc.side)return;
+  if(cc.mode==='online'&&(!onlineMatch||cc.turn!==onlineMatch.color||onlineMovePending))return;
+  if(cc.selected!==null&&cc.legal.some(m=>m.to===index)){dPlay(cc.legal.find(m=>m.to===index));return;}
+  if(dPieceColor(cc.board[index])===cc.turn&&(cc.chainFrom===null||cc.chainFrom===index)){
+    cc.selected=index;cc.legal=dMovesFrom(index);renderChinese();
+  }else if(cc.chainFrom===null){cc.selected=null;cc.legal=[];renderChinese();}
+}
+function dPlay(move,fromNetwork=false){
+  if(!cc||cc.over)return;
+  if(cc.mode==='online'&&!fromNetwork){
+    if(!onlineMatch||!onlineSocket?.connected||onlineMovePending)return;
+    onlineMovePending=true;
+    onlineSocket.timeout(10000).emit('game:move',{from:move.from,to:move.to},(err,response)=>{
+      if(err||!response?.ok){onlineMovePending=false;showToast(response?.error||'No se pudo enviar el movimiento.');}
+    });
+    return;
+  }
+  const board=cc.board,p=board[move.from],color=cc.turn;
+  board[move.to]=p;board[move.from]=null;
+  if(move.capture!==null){board[move.capture]=null;cc.quiet=0;}else cc.quiet++;
+  let crowned=false;
+  const [row]=dRC(move.to);
+  if(!dIsKing(p)&&((color==='r'&&row===0)||(color==='b'&&row===7))){board[move.to]=color==='r'?'R':'B';crowned=true;}
+  cc.lastMove={from:move.from,to:move.to};
+  cc.history.push({color,from:move.from,to:move.to,capture:move.capture});
+  playSound(move.capture!==null?'capture':'move');
+  if(move.capture!==null&&!crowned){
+    const next=dRawMoves(board,move.to,true);
+    if(next.length){cc.chainFrom=move.to;cc.selected=move.to;cc.legal=next;renderChinese();if(cc.mode==='bot'&&cc.turn!==cc.side)dScheduleBot(420);return;}
+  }
+  cc.chainFrom=null;cc.selected=null;cc.legal=[];
+  const enemy=color==='r'?'b':'r';
+  const enemyPieces=board.filter(x=>dPieceColor(x)===enemy).length;
+  const enemyMoves=dAllMoves(enemy);
+  if(enemyPieces===0||enemyMoves.length===0){dFinish(color);return;}
+  cc.turn=enemy;renderChinese();
+  if(cc.mode==='bot'&&cc.turn!==cc.side)dScheduleBot();
+}
+function dFinish(winner){
+  if(!cc||cc.over)return;cc.over=true;clearTimeout(ccBotTimer);
+  const humanWon=cc.mode==='bot'?winner===cc.side:cc.mode==='online'?winner===onlineMatch?.color:true;
+  const stats=safeLoad('fantasyGames6CheckersStats',{games:0,wins:0,losses:0,draws:0});
+  stats.games++;if(cc.mode==='bot'||cc.mode==='online'){if(humanWon)stats.wins++;else stats.losses++;}else{stats.wins++;stats.losses++;}
+  safeSave('fantasyGames6CheckersStats',stats);
+  updateHall();
+  grantArsenalReward("checkers",winner,cc.mode);
+  $('cc-result-title').textContent=humanWon?'¡VICTORIA DEL REINO!':cc.mode==='online'?'EL REINO RIVAL HA TRIUNFADO':'EL BOT HA TRIUNFADO';
+  $('cc-result-message').textContent=(winner==='r'?'Las Rojas':'Los Negros')+' han conquistado el tablero.';
+  renderChinese();openModal('modal-chinese-result');
+}
+function dBotScore(move){
+  const board=cc.board,p=board[move.from],color=cc.turn,enemy=color==='r'?'b':'r';
+  const [r,c]=dRC(move.to);let score=Math.random()*1.6;
+  if(move.capture!==null)score+=18+(dIsKing(board[move.capture])?7:0);
+  if(!dIsKing(p)&&((color==='r'&&r===0)||(color==='b'&&r===7)))score+=24;
+  score+= (3.5-Math.abs(3.5-c))*0.45;
+  score+= (color==='r'?(7-r):r)*0.22;
+  // Prefer moves that leave the destination less exposed to immediate capture.
+  const test=board.slice();test[move.to]=p;test[move.from]=null;if(move.capture!==null)test[move.capture]=null;
+  let threatened=0;
+  for(let i=0;i<64;i++)if(dPieceColor(test[i])===enemy){
+    for(const m of dRawMoves(test,i,true))if(m.to===move.to)threatened++;
+  }
+  if(threatened)score-=8*threatened;
+  return score;
+}
+function dBotMove(){
+  if(!cc||cc.over||cc.turn===cc.side)return;
+  let moves;
+  if(cc.chainFrom!==null)moves=dRawMoves(cc.board,cc.chainFrom,true);
+  else moves=dAllMoves(cc.turn);
+  if(!moves.length){dFinish(cc.side);return;}
+  const scored=moves.map(m=>({m,score:dBotScore(m)})).sort((a,b)=>b.score-a.score);
+  const level=cc.level||2;
+  const pool=level===1?scored.slice(0,Math.min(8,scored.length)):level===2?scored.slice(0,Math.min(4,scored.length)):scored.slice(0,Math.min(2,scored.length));
+  // Randomized choice among strong candidates avoids the same deterministic opening every game.
+  const chosen=pool[Math.floor(Math.random()*pool.length)].m;
+  if(cc.chainFrom===null){cc.selected=chosen.from;cc.legal=dMovesFrom(chosen.from);}
+  dPlay(chosen);
+}
+function dScheduleBot(delay=520){
+  if(!cc||cc.over||cc.turn===cc.side)return;
+  clearTimeout(ccBotTimer);const match=cc;
+  ccBotTimer=setTimeout(()=>{
+    if(cc!==match||!cc||cc.over||cc.turn===cc.side)return;
+    try{dBotMove();}catch(err){console.error('Error BOT damas:',err);showToast('El BOT tuvo un error. Intenta reiniciar la partida.');}
+  },delay);
+}
+function renderChinese(){
+  if(!cc)return;
+  const board=$('chinese-board');board.innerHTML='';
+  const legal=new Set(cc.legal.map(m=>m.to));
+  for(let i=0;i<64;i++){
+    const [r,c]=dRC(i),btn=document.createElement('button');
+    btn.type='button';btn.className='square '+((r+c)%2===0?'light':'dark');btn.dataset.index=i;
+    if(cc.lastMove&&(cc.lastMove.from===i||cc.lastMove.to===i))btn.classList.add('last-move');
+    if(cc.selected===i)btn.classList.add('selected');
+    if(legal.has(i)&&settings.hints!==false)btn.classList.add('legal');
+    const piece=cc.board[i];
+    if(piece){const el=document.createElement('span');el.className='draught-piece '+(dPieceColor(piece)==='r'?'red':'black')+(dIsKing(piece)?' king':'');if(dIsKing(piece))el.textContent='♛';btn.appendChild(el);}
+    btn.setAttribute('aria-label',`Casilla ${String.fromCharCode(97+c)}${8-r}${piece?' ocupada':''}`);
+    btn.addEventListener('click',()=>dSelect(i));board.appendChild(btn);
+  }
+  refreshFantasy3D(board,cc.board,"checkers");
+  const names={r:'Reino Azul',b:'Reino Glacial'};
+  $('cc-turn').textContent=cc.over?'Partida terminada':'Turno: '+(cc.turn==='r'?'Azules':'Glaciales')+(cc.mode==='bot'&&cc.turn!==cc.side?' · BOT':'');
+  const forced=dAllMoves(cc.turn).some(m=>m.capture!==null);
+  $('cc-status').textContent=cc.chainFrom!==null?'¡Captura encadenada! Debes continuar con la misma ficha.':forced?'Hay una captura obligatoria disponible.':cc.mode==='bot'&&cc.turn!==cc.side?'El guardián está calculando su jugada…':'Selecciona una ficha para mostrar sus movimientos.';
+  $('cc-players').innerHTML='';
+  for(const color of ['r','b']){
+    const row=document.createElement('div');row.className='checkers-player'+(cc.turn===color&&!cc.over?' active':'');
+    const dot=document.createElement('span');dot.className='checkers-dot '+(color==='r'?'red':'black');
+    const label=document.createElement('span');label.textContent=names[color]+(cc.mode==='bot'&&color!==cc.side?' · BOT':' · '+(cc.mode==='bot'?'TÚ':'JUGADOR'));
+    row.append(dot,label);$('cc-players').appendChild(row);
+  }
+}
+function ccInit(){
+  $('btn-chinese').addEventListener('click',ccOpenSetup);
+  $('cc-start').addEventListener('click',()=>{const mode=$('cc-mode').value,side=$('cc-side').value,level=Number($('cc-level').value);closeModal('modal-chinese-setup');dStart(mode,side,level);});
+  $('btn-chinese-menu').addEventListener('click',()=>{clearTimeout(ccBotTimer);if(cc?.mode==='online')leaveOnlineMatch();closeAllModals();showScreen('menu');});
+  $('cc-new-game').addEventListener('click',()=>{if(cc?.mode==='online'){leaveOnlineMatch();showScreen('online');showToast('Crea una nueva sala para otra batalla.');}else ccOpenSetup();});
+  $('cc-resign').addEventListener('click',()=>{if(!cc||cc.over)return;if(cc.mode==='online'){if(onlineSocket?.connected)onlineSocket.timeout(8000).emit('game:resign',(err,response)=>{if(err||!response?.ok)showToast(response?.error||'No se pudo abandonar la partida.');});return;}dFinish(cc.mode==='bot'? (cc.side==='r'?'b':'r'):(cc.turn==='r'?'b':'r'));});
+  $('cc-rematch').addEventListener('click',()=>{closeModal('modal-chinese-result');if(ccSetup.mode==='online'){leaveOnlineMatch();showScreen('online');showToast('Crea una nueva sala para la revancha.');}else dStart(ccSetup.mode,ccSetup.side,ccSetup.level);});
+  $('cc-result-menu').addEventListener('click',()=>{if(cc?.mode==='online')leaveOnlineMatch();closeModal('modal-chinese-result');showScreen('menu');});
+}
+
+
+/* ===== FANTASY GAMES 8.2 · ARSENAL / ETAPA 1 ===== */
+const ARSENAL_COLLECTIONS = {
+  boards:{
+    title:"FORJA DE TABLEROS",
+    description:"Campos de batalla forjados por los antiguos reinos. Cada colección tendrá una identidad visual propia.",
+    items:[
+      ["Reino Real","♜","El campo de batalla original de plata, azul mágico y piedra noble.","linear-gradient(90deg,#f7fcff,#9bc7e5,#315b80)"],
+      ["Hielo Eterno","❄","Un tablero de cristal helado atravesado por energía celestial.","linear-gradient(90deg,#ffffff,#9fe3ff,#397ba9)"],
+      ["Bosque Antiguo","♧","Madera ancestral, musgo brillante y magia esmeralda.","linear-gradient(90deg,#d4e8b9,#4d9567,#173c32)"],
+      ["Reino de Obsidiana","♛","Piedra volcánica oscura con vetas y ornamentos dorados.","linear-gradient(90deg,#17131b,#6c4a27,#e4bd67)"],
+      ["Reino Arcano","✧","Runas antiguas y energía sobrenatural en cada casilla.","linear-gradient(90deg,#201638,#7656b5,#63c9ff)"]
+    ]
+  },
+  pieces:{
+    title:"COLECCIONES DE PIEZAS",
+    description:"Armaduras y reliquias para los ejércitos. Sus movimientos seguirán dependiendo de las reglas originales del juego.",
+    items:[
+      ["Plata Real","♔","Piezas nobles de plata pulida y detalles celestiales.","linear-gradient(90deg,#ffffff,#b7d5e9,#547a9c)"],
+      ["Hielo Eterno","❄","Figuras cristalinas con reflejos azules y blancos.","linear-gradient(90deg,#fff,#9ee7ff,#3675a5)"],
+      ["Jade Ancestral","♟","Tallados de jade profundo con vetas verdes encantadas.","linear-gradient(90deg,#d5f4c8,#48a477,#164d3b)"],
+      ["Astrales","✦","Reliquias luminosas inspiradas en constelaciones y estrellas.","linear-gradient(90deg,#f8e6ff,#9a7bd0,#394e9a)"],
+      ["Obsidiana Imperial","♚","Piezas de obsidiana negra coronadas con oro antiguo.","linear-gradient(90deg,#17131b,#6a4a2b,#e4bd67)"]
+    ]
+  },
+  effects:{
+    title:"EFECTOS MÁGICOS",
+    description:"Auras y partículas pensadas para acompañar las piezas sin ocultar las casillas ni perjudicar el rendimiento.",
+    items:[
+      ["Aura Mágica","◉","Un halo sutil que envuelve las piezas seleccionadas.","linear-gradient(90deg,#243b80,#64c8ff,#e5faff)"],
+      ["Runas Antiguas","ᚱ","Símbolos arcanos que aparecen alrededor de las piezas.","linear-gradient(90deg,#3c235e,#a77bdb,#f1d58d)"],
+      ["Polvo Estelar","✧","Pequeños destellos que flotan suavemente sobre el tablero.","linear-gradient(90deg,#172c55,#77caff,#fff0bd)"],
+      ["Energía del Vacío","◈","Energía oscura y discreta para el reino de obsidiana.","linear-gradient(90deg,#090b16,#49346c,#9a74d6)"],
+      ["Resplandor Celestial","☼","Un brillo plateado y azul para las piezas del reino de la luz.","linear-gradient(90deg,#eaf8ff,#80cfff,#fff4c8)"]
+    ]
+  },
+  themes:{
+    title:"TEMAS DE LOS REINOS",
+    description:"Apariencias globales que, en su etapa correspondiente, abarcarán menús, paneles, botones, ventanas y controles.",
+    items:[
+      ["Original 8.0","♛","La identidad clásica: azul, plata, negro y oro.","linear-gradient(90deg,#dceeff,#234a70,#111827,#d7b46a)"],
+      ["Hielo Celestial","❄","Blanco glacial, azul hielo y plata luminosa.","linear-gradient(90deg,#fff,#b9eaff,#6b9fca)"],
+      ["Reino Esmeralda","♧","Verde profundo, jade y ornamentos dorados.","linear-gradient(90deg,#163b2d,#4c9a70,#d7b46a)"],
+      ["Eclipse","☾","Negro nocturno, violeta y energía mágica.","linear-gradient(90deg,#090812,#4d3477,#a68ae0)"],
+      ["Arena Imperial","♜","Arena antigua, bronce y oro de los reyes.","linear-gradient(90deg,#e7d1a4,#a97842,#4c3020)"]
+    ]
+  }
+};
+const ARSENAL_PROGRESS_KEY="fantasyGamesArsenalProgressV1";
+const ARSENAL_DEFAULT_PROGRESS={xp:0,coins:150,games:0,wins:0,unlocked:["boards-0","pieces-0","themes-0"],equippedBoard:"boards-0",equippedPiece:"pieces-0",equippedEffect:"",equippedTheme:"themes-0"};
+let arsenalProgress={...ARSENAL_DEFAULT_PROGRESS};
+function loadArsenalProgress(){
+  const saved=safeLoad(ARSENAL_PROGRESS_KEY,null);
+  if(saved&&typeof saved==="object"){
+    arsenalProgress={...ARSENAL_DEFAULT_PROGRESS,...saved};
+    if(!Array.isArray(arsenalProgress.unlocked))arsenalProgress.unlocked=[...ARSENAL_DEFAULT_PROGRESS.unlocked];
+    const validSlot=(value,prefix)=>typeof value==="string"&&new RegExp("^"+prefix+"-[0-4]$").test(value)&&arsenalProgress.unlocked.includes(value);
+    if(!validSlot(arsenalProgress.equippedBoard,"boards"))arsenalProgress.equippedBoard="boards-0";
+    if(!validSlot(arsenalProgress.equippedPiece,"pieces"))arsenalProgress.equippedPiece="pieces-0";
+    if(!validSlot(arsenalProgress.equippedTheme,"themes"))arsenalProgress.equippedTheme="themes-0";
+    if(arsenalProgress.equippedEffect!==""&&!validSlot(arsenalProgress.equippedEffect,"effects"))arsenalProgress.equippedEffect="";
+    arsenalProgress.xp=Math.max(0,Number(arsenalProgress.xp)||0);
+    arsenalProgress.coins=Math.max(0,Number(arsenalProgress.coins)||0);
+    arsenalProgress.games=Math.max(0,Number(arsenalProgress.games)||0);
+    arsenalProgress.wins=Math.max(0,Number(arsenalProgress.wins)||0);
+  }else arsenalProgress={...ARSENAL_DEFAULT_PROGRESS,unlocked:[...ARSENAL_DEFAULT_PROGRESS.unlocked]};
+  saveArsenalProgress();
+}
+function saveArsenalProgress(){safeSave(ARSENAL_PROGRESS_KEY,arsenalProgress)}
+function applyArsenalBoardVisual(){
+  const skins={"boards-0":"royal","boards-1":"ice","boards-2":"forest","boards-3":"obsidian","boards-4":"arcane"};
+  const themes={"themes-0":"original","themes-1":"ice","themes-2":"emerald","themes-3":"eclipse","themes-4":"arena"};
+  const effects={"":"none","effects-0":"aura","effects-1":"runes","effects-2":"stardust","effects-3":"void","effects-4":"celestial"};
+  document.documentElement.setAttribute("data-board-skin",skins[arsenalProgress.equippedBoard]||"royal");
+  document.documentElement.setAttribute("data-fg-ui-theme",themes[arsenalProgress.equippedTheme]||"original");
+  document.documentElement.setAttribute("data-fg-effect",effects[arsenalProgress.equippedEffect]||"none");
+  document.documentElement.setAttribute("data-fg-piece-style",arsenalProgress.equippedPiece||"pieces-0");
+  const note=document.getElementById("arsenal-equipped-board");
+  const names=ARSENAL_COLLECTIONS.boards.items;
+  const index=Math.max(0,Number(String(arsenalProgress.equippedBoard||"boards-0").split("-")[1])||0);
+  if(note)note.textContent="TABLERO ACTIVO: "+(names[index]?.[0]||"REINO REAL").toUpperCase();
+}
+function equipArsenalBoard(index,name){equipArsenalItem("boards",index,name)}
+function equipArsenalItem(category,index,name){
+  const id=category+"-"+index;
+  if(!arsenalProgress.unlocked.includes(id)){showToast("Primero debes desbloquear este artículo.");return;}
+  const slots={boards:"equippedBoard",pieces:"equippedPiece",effects:"equippedEffect",themes:"equippedTheme"};
+  const slot=slots[category];if(!slot)return;
+  arsenalProgress[slot]=id;
+  saveArsenalProgress();applyArsenalBoardVisual();
+  if(game&&$("screen-game")?.classList.contains("active"))renderGame();
+  if(cc&&$("screen-chinese")?.classList.contains("active"))renderChinese();
+  renderArsenalCategory(category);
+  const labels={boards:"tablero",pieces:"colección de piezas",effects:"efecto mágico",themes:"tema completo"};
+  showToast("¡"+name+" equipado! Se aplicó en "+labels[category]+".");
+}
+function arsenalLevel(){return Math.floor(arsenalProgress.xp/250)+1}
+function updateArsenalProgressUI(){
+  const level=arsenalLevel(),inLevel=arsenalProgress.xp%250;
+  const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value)};
+  set("arsenal-level","NIVEL "+level);set("arsenal-xp",arsenalProgress.xp);set("arsenal-coins",arsenalProgress.coins);
+  set("arsenal-games",arsenalProgress.games);set("arsenal-wins",arsenalProgress.wins);set("arsenal-unlocks",arsenalProgress.unlocked.length);
+  set("arsenal-next-level",inLevel+" / 250 XP para el siguiente nivel");
+  applyArsenalBoardVisual();
+  const fill=document.getElementById("arsenal-xp-fill");if(fill)fill.style.width=(inLevel/250*100)+"%";
+}
+function grantArsenalReward(kind,result,mode){
+  let xp=0,coins=0,won=false;
+  if(kind==="chess"){
+    if(result.type==="draw"||result.type==="stalemate"){xp=50;coins=30;}
+    else if(mode==="bot"){
+      won=result.winner===opposite(game.bot.side);
+      xp=won?100:35;coins=won?60:20;
+    }else{xp=60;coins=35;won=true;}
+  }else{
+    won=mode!=="bot"||result===cc.side;
+    xp=won?80:30;coins=won?45:18;
+  }
+  arsenalProgress.xp+=xp;arsenalProgress.coins+=coins;arsenalProgress.games++;
+  if(won)arsenalProgress.wins++;
+  saveArsenalProgress();updateArsenalProgressUI();
+  showToast("Recompensa: +"+xp+" XP y +"+coins+" monedas. ¡Tu reino progresa!");
+}
+function arsenalPrice(category,index){
+  const prices={boards:[0,280,420,550,700],pieces:[0,300,450,580,720],effects:[0,220,340,460,600],themes:[0,650,750,850,950]};
+  const xpReq={boards:[0,0,100,180,260],pieces:[0,0,120,200,300],effects:[0,0,80,160,240],themes:[0,0,250,400,600]};
+  return {coins:prices[category]?.[index]??500,xp:xpReq[category]?.[index]??0};
+}
+function renderArsenalCategory(category){
+  const data=ARSENAL_COLLECTIONS[category]||ARSENAL_COLLECTIONS.boards;
+  const title=document.getElementById("arsenal-category-title"),description=document.getElementById("arsenal-category-description"),grid=document.getElementById("arsenal-collection-grid");
+  if(!title||!description||!grid)return;
+  title.textContent=data.title;description.textContent=data.description;grid.innerHTML="";
+  data.items.forEach(([name,icon,detail,swatch],index)=>{
+    const id=category+"-"+index,owned=arsenalProgress.unlocked.includes(id),price=arsenalPrice(category,index);
+    const canAfford=arsenalProgress.coins>=price.coins&&arsenalProgress.xp>=price.xp;
+    const card=document.createElement("article");card.className="arsenal-card "+(owned?"is-owned":"is-locked");
+    const top=document.createElement("div");top.className="arsenal-card-top";
+    const emblem=document.createElement("span");emblem.className="arsenal-card-icon";emblem.textContent=icon;
+    const state=document.createElement("span");state.className="arsenal-card-state "+(owned?"owned":"locked");state.textContent=owned?"DESBLOQUEADO":"🔒 BLOQUEADO";
+    top.append(emblem,state);
+    const heading=document.createElement("h3");heading.textContent=name;
+    const copy=document.createElement("p");copy.textContent=detail;
+    const bar=document.createElement("div");bar.className="arsenal-swatch";bar.style.setProperty("--swatch",swatch);
+    const action=document.createElement("button");action.type="button";action.className="arsenal-card-action";
+    if(owned){
+      const slots={boards:"equippedBoard",pieces:"equippedPiece",effects:"equippedEffect",themes:"equippedTheme"};
+      const equipped=arsenalProgress[slots[category]]===id;
+      const labels={boards:"TABLERO",pieces:"PIEZAS 3D",effects:"EFECTO",themes:"TEMA"};
+      if(equipped){action.textContent="✓ "+labels[category]+" EQUIPADO";action.disabled=true;}
+      else{action.textContent="⚔ EQUIPAR "+labels[category];action.disabled=false;action.addEventListener("click",()=>equipArsenalItem(category,index,name));}
+    }else{action.textContent="◈ "+price.coins+" MONEDAS · "+price.xp+" XP";action.disabled=!canAfford;action.addEventListener("click",()=>unlockArsenalItem(category,index,name,price));}
+    card.append(top,heading,copy,bar,action);grid.appendChild(card);
+  });
+}
+function unlockArsenalItem(category,index,name,price){
+  const id=category+"-"+index;
+  if(arsenalProgress.unlocked.includes(id))return;
+  if(arsenalProgress.coins<price.coins||arsenalProgress.xp<price.xp){showToast("Aún necesitas más monedas o experiencia para desbloquearlo.");return;}
+  arsenalProgress.coins-=price.coins;arsenalProgress.unlocked.push(id);saveArsenalProgress();updateArsenalProgressUI();
+  const active=document.querySelector("[data-arsenal-cat].active");renderArsenalCategory(active?.dataset.arsenalCat||category);
+  showToast("¡"+name+" desbloqueado! Ya forma parte de tu colección.");
+}
+function initArsenal(){
+  loadArsenalProgress();applyArsenalBoardVisual();updateArsenalProgressUI();
+  const open=document.getElementById("btn-arsenal");
+  if(open)open.addEventListener("click",()=>{renderArsenalCategory("boards");showScreen("arsenal");});
+  document.querySelectorAll("[data-arsenal-cat]").forEach(tab=>tab.addEventListener("click",()=>{
+    document.querySelectorAll("[data-arsenal-cat]").forEach(other=>{const active=other===tab;other.classList.toggle("active",active);other.setAttribute("aria-selected",String(active));});
+    renderArsenalCategory(tab.dataset.arsenalCat);
+  }));
+  renderArsenalCategory("boards");
+}
+
+
+/* ===== MOTOR DE PIEZAS 3D · MODELOS PROCEDURALES EN THREE.JS =====
+   El juego conserva sus casillas HTML y reglas originales; el canvas solo dibuja
+   los modelos encima con pointer-events:none. Si Three.js/WebGL no está disponible,
+   se mantienen visibles las piezas 2D con extrusión como respaldo. */
+let fg3DRenderer=null,fg3DScene=null,fg3DCamera=null,fg3DRoot=null,fg3DObserver=null,fg3DObservedBoard=null,fg3DPending=0,fg3DWarned=false;
+function fg3DColorSet(kind,code){
+  const side=kind==="chess"?(code===code.toUpperCase()?"light":"dark"):(dPieceColor(code)==="r"?"light":"dark");
+  const style=Number(String(arsenalProgress.equippedPiece||"pieces-0").split("-")[1])||0;
+  const sets=[
+    {light:0xc9e7f8,dark:0xb88c43,lightAccent:0xf2fbff,darkAccent:0xffdf8b},
+    {light:0xdff8ff,dark:0x276b9c,lightAccent:0xffffff,darkAccent:0x79dcff},
+    {light:0x8fce9b,dark:0x244f3c,lightAccent:0xd9ffd9,darkAccent:0x74d49b},
+    {light:0xe3d3ff,dark:0x3c3b86,lightAccent:0xffffff,darkAccent:0x95d8ff},
+    {light:0x252b38,dark:0x14151c,lightAccent:0xe7c575,darkAccent:0xe6bd69}
+  ];
+  if(kind==="chess"&&style===0){
+    const w={silver:0xc9e7f8,ivory:0xf0dfb7,emerald:0x56b987}[settings.chessWhite]||0xc9e7f8;
+    const b={gold:0xb88c43,steel:0x526b84,blue:0x347ab7}[settings.chessBlack]||0xb88c43;
+    return side==="light"?{main:w,accent:0xeaf8ff}:{main:b,accent:0xffdf8b};
+  }
+  if(kind==="checkers"&&style===0){
+    const palette=settings.draughtPalette||"classic";
+    const p={classic:{light:0xbfeaff,dark:0x244d78,lightAccent:0xffffff,darkAccent:0x7db7e6},royal:{light:0xd8b66b,dark:0x607e9e,lightAccent:0xffe9a9,darkAccent:0xc7e5ff},arcane:{light:0x9a76d1,dark:0x247f8c,lightAccent:0xe3d6ff,darkAccent:0x9af2ee}}[palette]||{};
+    return side==="light"?{main:p.light,accent:p.lightAccent}:{main:p.dark,accent:p.darkAccent};
+  }
+  const set=sets[style]||sets[0];
+  return side==="light"?{main:set.light,accent:set.lightAccent}:{main:set.dark,accent:set.darkAccent};
+}
+function fg3DEffectColor(){
+  const i=Number(String(arsenalProgress.equippedEffect||"").split("-")[1]);
+  return [0x59bfff,0xb18bdf,0x9bcaff,0x7853c7,0xe5f6ff][i]||0x000000;
+}
+function fg3DMaterials(kind,code){
+  const T=window.THREE,colors=fg3DColorSet(kind,code),effect=fg3DEffectColor();
+  const glow=arsenalProgress.equippedEffect?0.22:0.035;
+  const main=new T.MeshPhysicalMaterial({color:colors.main,metalness:.78,roughness:.23,clearcoat:.9,clearcoatRoughness:.18,emissive:effect,emissiveIntensity:glow});
+  const accent=new T.MeshPhysicalMaterial({color:colors.accent,metalness:.82,roughness:.2,clearcoat:1,emissive:effect,emissiveIntensity:glow*.8});
+  const dark=new T.MeshStandardMaterial({color:0x151a25,metalness:.65,roughness:.3});
+  return {main,accent,dark};
+}
+function fg3DAddMesh(group,geometry,material,x=0,y=0,z=0){
+  const mesh=new window.THREE.Mesh(geometry,material);mesh.position.set(x,y,z);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);return mesh;
+}
+function fg3DLathe(group,profile,material){
+  const T=window.THREE,points=profile.map(p=>new T.Vector2(p[0],p[1]));
+  return fg3DAddMesh(group,new T.LatheGeometry(points,36),material);
+}
+function fg3DRing(group,radius,tube,y,material){
+  const T=window.THREE,mesh=fg3DAddMesh(group,new T.TorusGeometry(radius,tube,8,40),material,0,y,0);mesh.rotation.x=Math.PI/2;return mesh;
+}
+function fg3DMakeChessPiece(code){
+  const T=window.THREE,type=code.toLowerCase(),m=fg3DMaterials("chess",code),g=new T.Group();
+  const base=[[0,.025],[.21,.025],[.29,.055],[.31,.105],[.28,.15],[.2,.18],[.15,.22],[0,.22]];
+  fg3DLathe(g,base,m.main);fg3DRing(g,.255,.025,.12,m.accent);
+  if(type==="p"){
+    fg3DLathe(g,[[0,.2],[.13,.2],[.16,.27],[.11,.35],[.095,.48],[.15,.54],[0,.54]],m.main);
+    fg3DAddMesh(g,new T.SphereGeometry(.19,28,20),m.accent,0,.69,0);
+    fg3DRing(g,.14,.018,.48,m.accent);
+  }else if(type==="r"){
+    fg3DLathe(g,[[0,.19],[.2,.19],[.22,.25],[.17,.31],[.17,.75],[.25,.78],[.27,.87],[0,.87]],m.main);
+    fg3DRing(g,.22,.028,.32,m.accent);
+    for(let k=0;k<6;k++){const a=k*Math.PI/3;fg3DAddMesh(g,new T.BoxGeometry(.13,.17,.13),m.accent,Math.cos(a)*.19,.91,Math.sin(a)*.19);}
+  }else if(type==="n"){
+    fg3DLathe(g,[[0,.19],[.2,.19],[.21,.26],[.14,.32],[.13,.45],[.2,.51],[0,.51]],m.main);
+    const neck=fg3DAddMesh(g,new T.ConeGeometry(.19,.52,24),m.main,0,.64,-.015);neck.rotation.z=-.18;
+    const head=fg3DAddMesh(g,new T.SphereGeometry(.2,24,20),m.accent,0,.89,.08);head.scale.set(.78,1.08,.72);
+    const muzzle=fg3DAddMesh(g,new T.SphereGeometry(.13,20,16),m.main,0,.76,.22);muzzle.scale.set(.9,.62,1.25);
+    for(const sign of [-1,1]){const ear=fg3DAddMesh(g,new T.ConeGeometry(.055,.2,12),m.accent,sign*.105,1.06,.055);ear.rotation.z=sign*.2;fg3DAddMesh(g,new T.SphereGeometry(.025,10,8),m.dark,sign*.145,.91,.205);}
+  }else if(type==="b"){
+    fg3DLathe(g,[[0,.19],[.2,.19],[.22,.26],[.14,.33],[.12,.7],[.19,.76],[0,.76]],m.main);
+    fg3DAddMesh(g,new T.SphereGeometry(.17,24,18),m.accent,0,.83,0);
+    const hat=fg3DAddMesh(g,new T.ConeGeometry(.16,.35,28),m.main,0,1.06,0);hat.rotation.z=.03;
+    fg3DRing(g,.12,.018,.74,m.accent);
+  }else if(type==="q"||type==="k"){
+    fg3DLathe(g,[[0,.19],[.2,.19],[.22,.27],[.13,.34],[.12,.72],[.2,.78],[0,.78]],m.main);
+    fg3DRing(g,.19,.025,.33,m.accent);fg3DRing(g,.14,.02,.69,m.accent);
+    fg3DAddMesh(g,new T.SphereGeometry(.13,24,18),m.accent,0,.83,0);
+    if(type==="q"){
+      fg3DRing(g,.2,.025,.91,m.accent);
+      for(let k=0;k<8;k++){const a=k*Math.PI/4;const spike=fg3DAddMesh(g,new T.ConeGeometry(.055,.24,12),m.accent,Math.cos(a)*.19,1.02,Math.sin(a)*.19);spike.rotation.z=Math.cos(a)*-.18;spike.rotation.x=Math.sin(a)*.18;}
+      fg3DAddMesh(g,new T.SphereGeometry(.075,18,14),m.accent,0,1.1,0);
+    }else{
+      fg3DAddMesh(g,new T.BoxGeometry(.09,.38,.09),m.accent,0,1.12,0);
+      fg3DAddMesh(g,new T.BoxGeometry(.31,.085,.09),m.accent,0,1.19,0);
+      fg3DAddMesh(g,new T.SphereGeometry(.065,16,12),m.accent,0,1.36,0);
+    }
+  }
+  return g;
+}
+function fg3DMakeCheckerPiece(code){
+  const T=window.THREE,m=fg3DMaterials("checkers",code),g=new T.Group();
+  fg3DAddMesh(g,new T.CylinderGeometry(.34,.39,.17,40),m.main,0,.13,0);
+  fg3DRing(g,.31,.035,.21,m.accent);
+  fg3DAddMesh(g,new T.CylinderGeometry(.29,.3,.045,40),m.accent,0,.235,0);
+  fg3DRing(g,.23,.012,.262,m.main);
+  if(dIsKing(code)){
+    fg3DAddMesh(g,new T.TorusGeometry(.13,.025,8,24),m.accent,0,.31,0).rotation.x=Math.PI/2;
+    for(let k=0;k<5;k++){const a=k*Math.PI*2/5;fg3DAddMesh(g,new T.ConeGeometry(.045,.13,10),m.accent,Math.cos(a)*.13,.37,Math.sin(a)*.13);}
+    fg3DAddMesh(g,new T.SphereGeometry(.045,12,10),m.accent,0,.42,0);
+  }
+  return g;
+}
+function fg3DEnsureRenderer(boardEl){
+  const T=window.THREE;if(!T||!T.WebGLRenderer)return false;
+  try{
+    if(!fg3DRenderer){
+      fg3DScene=new T.Scene();fg3DRoot=new T.Group();fg3DScene.add(fg3DRoot);
+      fg3DCamera=new T.OrthographicCamera(-4.05,4.05,4.05,-4.05,.1,80);
+      fg3DCamera.position.set(0,11,5.5);fg3DCamera.lookAt(0,0,0);
+      fg3DScene.add(new T.HemisphereLight(0xd8edff,0x1c1726,1.45));
+      const key=new T.DirectionalLight(0xffffff,2.1);key.position.set(-4,9,5);key.castShadow=true;fg3DScene.add(key);
+      const fill=new T.DirectionalLight(0x7abfff,.8);fill.position.set(5,5,-5);fg3DScene.add(fill);
+      fg3DRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:"high-performance"});
+      fg3DRenderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));fg3DRenderer.setClearColor(0x000000,0);
+      if("outputColorSpace" in fg3DRenderer&&T.SRGBColorSpace)fg3DRenderer.outputColorSpace=T.SRGBColorSpace;
+      if(T.ACESFilmicToneMapping!==undefined){fg3DRenderer.toneMapping=T.ACESFilmicToneMapping;fg3DRenderer.toneMappingExposure=1.12;}
+      fg3DRenderer.domElement.className="fg-3d-canvas";fg3DRenderer.domElement.setAttribute("aria-hidden","true");
+      fg3DObserver=typeof ResizeObserver!=="undefined"?new ResizeObserver(()=>fg3DSize(fg3DObservedBoard)):null;
+      document.documentElement.classList.add("fg-webgl-3d-ready");
+    }
+    if(fg3DRenderer.domElement.parentElement!==boardEl){fg3DRenderer.domElement.remove();boardEl.appendChild(fg3DRenderer.domElement);}
+    if(fg3DObserver){fg3DObserver.disconnect();fg3DObservedBoard=boardEl;fg3DObserver.observe(boardEl);}
+    fg3DSize(boardEl);return true;
+  }catch(err){
+    console.warn("No se pudo iniciar el motor 3D; se usará el estilo de respaldo.",err);
+    document.documentElement.classList.remove("fg-webgl-3d-ready");return false;
+  }
+}
+function fg3DSize(boardEl){
+  if(!fg3DRenderer||!boardEl)return;const rect=boardEl.getBoundingClientRect();if(rect.width<2||rect.height<2)return;
+  fg3DRenderer.setSize(rect.width,rect.height,false);
+  const aspect=rect.width/rect.height;fg3DCamera.left=-4.05*aspect;fg3DCamera.right=4.05*aspect;fg3DCamera.top=4.05;fg3DCamera.bottom=-4.05;fg3DCamera.updateProjectionMatrix();
+  fg3DRenderer.render(fg3DScene,fg3DCamera);
+}
+function fg3DDisposeObject(object){
+  object.traverse(child=>{if(child.geometry)child.geometry.dispose();if(child.material){if(Array.isArray(child.material))child.material.forEach(m=>m.dispose());else child.material.dispose();}});
+}
+function refreshFantasy3D(boardEl,boardState,kind){
+  if(!boardEl)return;
+  if(!window.THREE){boardEl.dataset.fg3d="fallback";if(!fg3DWarned){fg3DWarned=true;console.info("Three.js no disponible: piezas con extrusión CSS activas como respaldo.");}return;}
+  if(!fg3DEnsureRenderer(boardEl)){boardEl.dataset.fg3d="fallback";return;}
+  boardEl.dataset.fg3d="webgl";
+  while(fg3DRoot.children.length){const child=fg3DRoot.children.pop();fg3DRoot.remove(child);fg3DDisposeObject(child);}
+  const zScale=1/(11/Math.sqrt(11*11+5.5*5.5));
+  boardState.forEach((code,index)=>{
+    if(!code)return;const row=Math.floor(index/8),col=index%8;
+    const piece=kind==="chess"?fg3DMakeChessPiece(code):fg3DMakeCheckerPiece(code);
+    piece.position.set(col-3.5,0,(row-3.5)*zScale);fg3DRoot.add(piece);
+    const T=window.THREE;const shadow=new T.Mesh(new T.CircleGeometry(kind==="chess"?.31:.36,24),new T.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.2,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.set(col-3.5,.018,(row-3.5)*zScale);fg3DRoot.add(shadow);
+  });
+  const ticket=++fg3DPending;
+  requestAnimationFrame(()=>{if(ticket!==fg3DPending||!fg3DRenderer)return;const rect=boardEl.getBoundingClientRect();if(rect.width>1&&rect.height>1)fg3DSize(boardEl);});
+}
+
+/* ===== SANTUARIO PRIVADO · VALIDACIÓN EN EL SERVIDOR =====
+   API prevista: POST /api/dedication/unlock {password}
+   Respuesta: {success:true,dedication:{title,signature,message}}
+   El servidor debe usar HTTPS, hash Argon2id/bcrypt, rate-limit y sesión
+   HttpOnly + Secure + SameSite. La contraseña y el contenido NO se persisten aquí. */
+function clearPrivateDedication(){
+  const content=$("dedication-content");if(content){content.innerHTML="";content.hidden=true;}
+  const input=$("dedication-password");if(input)input.value="";
+  const status=$("dedication-status");if(status)status.textContent="Santuario cerrado.";
+}
+function dedicationServerBase(){
+  const raw=($("server-url")?.value||"").trim();if(!raw)return null;
+  try{
+    const url=new URL(raw);const localHost=["localhost","127.0.0.1","::1"].includes(url.hostname);
+    if(url.protocol!=="https:"&&!(localHost&&url.protocol==="http:"))return null;
+    return url.origin;
+  }catch(e){return null;}
+}
+function renderPrivateDedication(data){
+  const content=$("dedication-content");if(!content)return;
+  content.innerHTML="";
+  const ornament=document.createElement("div");ornament.className="book-ornament";ornament.textContent="✧ ♛ ✧";
+  const kicker=document.createElement("div");kicker.className="brand-kicker";kicker.textContent="Una dedicatoria especial";
+  const title=document.createElement("h2");title.textContent=String(data.title||"Un recuerdo privado");
+  const signature=document.createElement("div");signature.className="book-signature";signature.textContent=String(data.signature||"");
+  const divider=document.createElement("div");divider.className="book-divider";
+  const message=document.createElement("div");message.className="book-message";message.textContent=String(data.message||"");
+  const footer=document.createElement("div");footer.className="book-footer";footer.textContent="FANTASY GAMES · LA GUERRA DE LOS REINOS";
+  content.append(ornament,kicker,title,signature,divider,message,footer);content.hidden=false;
+}
+function initDedicationPrivacy(){
+  const form=$("dedication-auth-form");if(!form)return;
+  form.addEventListener("submit",async event=>{
+    event.preventDefault();
+    const input=$("dedication-password"),status=$("dedication-status"),button=$("dedication-unlock-button");
+    const password=input?.value||"";if(!password)return;
+    const base=dedicationServerBase();
+    if(!base){status.textContent="Servidor privado aún no configurado. El acceso se habilitará cuando conectemos el servidor seguro.";input.value="";return;}
+    button.disabled=true;status.textContent="Solicitando validación segura…";
+    try{
+      const response=await fetch(base+"/api/dedication/unlock",{method:"POST",mode:"cors",credentials:"omit",cache:"no-store",headers:{"Content-Type":"application/json"},body:JSON.stringify({password})});
+      const payload=await response.json().catch(()=>null);
+      if(!response.ok||!payload||payload.success!==true||!payload.dedication){
+        status.textContent=response.status===401?"Clave incorrecta. El santuario continúa cerrado.":"No fue posible validar el acceso. Inténtalo cuando el servidor esté disponible.";
+        const content=$("dedication-content");if(content){content.innerHTML="";content.hidden=true;}
+      }else{
+        renderPrivateDedication(payload.dedication);status.textContent="Acceso autorizado por el servidor.";
+      }
+    }catch(err){status.textContent="No se pudo contactar el servidor privado. La dedicatoria permanece protegida.";}
+    finally{input.value="";button.disabled=false;}
+  });
+}
+
+// Three.js se carga con defer; el evento load ocurre después de que este módulo existe.
+function fg3DLibraryLoaded(){
+  if(!window.THREE)return;
+  if(game&&$("screen-game")?.classList.contains("active"))renderGame();
+  if(cc&&$("screen-chinese")?.classList.contains("active"))renderChinese();
+}
+window.addEventListener("load",fg3DLibraryLoaded,{once:true});
+
+// Inicializar todos los módulos del juego antes del Arsenal.
+initFantasyChess();
+ccInit();
+initArsenal();
+initDedicationPrivacy();
+initOnlineMultiplayer();
+
+
+</script>
+</body>
+</html>
