@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import bcrypt from 'bcryptjs';
 import { Server as SocketServer } from 'socket.io';
 import { Chess } from 'chess.js';
-import { createCheckersState, applyCheckersMove, publicCheckersState } from './src/checkers.js';
+import { createCheckersState, applyCheckersMove, publicCheckersState } from './checkers.js';
 
 const PORT = Number(process.env.PORT || 3000);
 const allowedOrigins = (process.env.CLIENT_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
